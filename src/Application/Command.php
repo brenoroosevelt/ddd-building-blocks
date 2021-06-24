@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DddBuildingBlocks\Application;
 
-interface ApplicationService
+interface Command
 {
-    public function __invoke(Command $command = null);
 }
