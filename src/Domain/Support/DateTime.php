@@ -6,6 +6,8 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Comparison;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\SpecificationTrait;
 use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
 
 class DateTime extends DateTimeImmutable
 {
@@ -15,6 +17,12 @@ class DateTime extends DateTimeImmutable
     protected function __construct($datetime = "now", $timezone = null)
     {
         parent::__construct($datetime, $timezone);
+    }
+
+    public static function createFromFormat($format, $datetime, DateTimeZone $timezone = null): self
+    {
+        $datetime = parent::createFromFormat($format, $datetime, $timezone);
+        return new self($datetime->format(self::ISO8601), $timezone);
     }
 
     public static function now(): self
