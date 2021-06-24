@@ -20,15 +20,6 @@ abstract class Enum extends StringType
         parent::__construct($value);
     }
 
-    final public static function values(): array
-    {
-        if (empty(self::$values[static::class])) {
-            self::$values[static::class] = (new ReflectionClass(static::class))->getConstants();
-        }
-
-        return self::$values[static::class];
-    }
-
     final public static function __callStatic(string $name, $args)
     {
         $values = self::values();
@@ -37,6 +28,15 @@ abstract class Enum extends StringType
         }
 
         return new static($values[$name]);
+    }
+
+    final public static function values(): array
+    {
+        if (empty(self::$values[static::class])) {
+            self::$values[static::class] = (new ReflectionClass(static::class))->getConstants();
+        }
+
+        return self::$values[static::class];
     }
 
     final public static function flipValues(): array
