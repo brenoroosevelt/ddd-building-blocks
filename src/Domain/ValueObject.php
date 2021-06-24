@@ -10,6 +10,6 @@ abstract class ValueObject implements Comparable
 
     public function equals($v): bool
     {
-        return $v == $this;
+        return $v instanceof $this && $v == $this;
     }
 }
