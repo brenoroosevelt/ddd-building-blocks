@@ -7,7 +7,7 @@ use Generator;
 
 final class EventProvider
 {
-    private static self $instance;
+    private static ?self $instance = null;
     private array $events;
 
     public function recordEvent(DomainEvent $event): void
@@ -24,11 +24,7 @@ final class EventProvider
 
     public static function instance(): self
     {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
+        return self::$instance ?? self::$instance = new self();
     }
 
     private function __construct() {}
