@@ -9,7 +9,8 @@ class EnumTest extends TestCase
 {
     public function testEnum()
     {
-        $st = Status::ATIVO();
+        $st = Status::ATIVOaa();
+        $st1 = new Status('ativo');
         $this->assertTrue($st->equals(Status::ATIVO));
     }
 }

@@ -13,10 +13,7 @@ abstract class Enum extends StringType
 
     final public function __construct(string $value)
     {
-        if (!in_array($value, static::values(), true)) {
-            throw $this->getInvalidException($value);
-        }
-
+        self::checkValue($value);
         parent::__construct($value);
     }
 
@@ -27,6 +24,24 @@ abstract class Enum extends StringType
         }
 
         return self::$values[static::class];
+    }
+
+    final public static function isAllowed($value): bool
+    {
+        return in_array($value, self::values(), true);
+    }
+
+    private static function checkValue($value): void
+    {
+        if (!self::isAllowed($value)) {
+            throw self::getInvalidException($value);
+        }
+    }
+
+    final public static function __callStatic(string $name, $args)
+    {
+        self::checkValue($name);
+        return new static(self::values()[$name]);
     }
 
     final public static function flipValues(): array
@@ -44,12 +59,7 @@ abstract class Enum extends StringType
         return array_keys(self::values());
     }
 
-    final public static function __callStatic(string $name, $args)
-    {
-        return new static(self::values()[$name]);
-    }
-
-    protected function getInvalidException(string $value): Throwable
+    protected static function getInvalidException(string $value): Throwable
     {
         return new InvalidArgumentException(
             sprintf("Invalid value (%s) for enum (%s)",$value, static::class)
