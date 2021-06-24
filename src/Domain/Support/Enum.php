@@ -13,7 +13,7 @@ abstract class Enum extends StringType
 
     final public function __construct(string $value)
     {
-        self::checkValue($value);
+        self::validateAllowedValue($value);
         parent::__construct($value);
     }
 
@@ -31,7 +31,7 @@ abstract class Enum extends StringType
         return in_array($value, self::values(), true);
     }
 
-    private static function checkValue($value): void
+    private static function validateAllowedValue($value): void
     {
         if (!self::isAllowed($value)) {
             throw self::getInvalidException($value);
@@ -40,7 +40,7 @@ abstract class Enum extends StringType
 
     final public static function __callStatic(string $name, $args)
     {
-        self::checkValue($name);
+        self::validateAllowedValue($name);
         return new static(self::values()[$name]);
     }
 
@@ -62,7 +62,7 @@ abstract class Enum extends StringType
     protected static function getInvalidException(string $value): Throwable
     {
         return new InvalidArgumentException(
-            sprintf("Invalid value (%s) for enum (%s)",$value, static::class)
+            sprintf("Invalid value (%s) for enum (%s)", $value, static::class)
         );
     }
 }
