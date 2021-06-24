@@ -34,6 +34,16 @@ abstract class Enum extends StringType
         return array_flip(self::values());
     }
 
+    final public static function onlyValues(): array
+    {
+        return array_values(self::values());
+    }
+
+    final public static function onlyKeys(): array
+    {
+        return array_keys(self::values());
+    }
+
     final public static function __callStatic(string $name, $args)
     {
         return new static(self::values()[$name]);
