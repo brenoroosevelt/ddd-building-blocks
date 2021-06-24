@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DddBuildingBlocks\Application;
 
-class Payload implements DataTransferObject
+use JsonSerializable;
+
+class Payload implements DataTransferObject, JsonSerializable
 {
     protected array $data;
 
@@ -35,5 +37,10 @@ class Payload implements DataTransferObject
     public function toArray(): array
     {
         return $this->data;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }
