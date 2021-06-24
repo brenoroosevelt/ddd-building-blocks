@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DddBuildingBlocks\Domain\Support;
 
-use Exception;
 use InvalidArgumentException;
 use ReflectionClass;
+use Throwable;
 
 abstract class Enum extends StringType
 {
@@ -29,12 +29,17 @@ abstract class Enum extends StringType
         return self::$values[static::class];
     }
 
+    final public static function flipValues(): array
+    {
+        return array_flip(self::values());
+    }
+
     final public static function __callStatic(string $name, $args)
     {
         return new static(self::values()[$name]);
     }
 
-    public function getInvalidException(string $value): Exception
+    protected function getInvalidException(string $value): Throwable
     {
         return new InvalidArgumentException(
             sprintf("Invalid value (%s) for enum (%s)",$value, static::class)
