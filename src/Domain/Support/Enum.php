@@ -31,11 +31,12 @@ abstract class Enum extends StringType
 
     final public static function __callStatic(string $name, $args)
     {
-        if (!array_key_exists($name, self::values())) {
+        $values = self::values();
+        if (!array_key_exists($name, $values)) {
             throw self::getInvalidException("$name()");
         }
 
-        return new static(self::values()[$name]);
+        return new static($values[$name]);
     }
 
     final public static function flipValues(): array
