@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DddBuildingBlocks\Domain\Support;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
 use InvalidArgumentException;
 use ReflectionClass;

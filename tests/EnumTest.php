@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DddBuildingBlocks\Test;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Test;
 
 use PHPUnit\Framework\TestCase;
 

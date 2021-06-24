@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DddBuildingBlocks\Domain\Support;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
-use BrenoRoosevelt\DddBuildingBlocks\Domain\ValueObject;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ValueObject;
 
 class IntegerType extends ValueObject
 {

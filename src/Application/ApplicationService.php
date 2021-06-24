@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DddBuildingBlocks\Application;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Application;
 
 interface ApplicationService
 {

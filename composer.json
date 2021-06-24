@@ -10,8 +10,8 @@
     },
     "autoload": {
         "psr-4": {
-            "BrenoRoosevelt\\DddBuildingBlocks\\" : "src/",
-            "BrenoRoosevelt\\DddBuildingBlocks\\Test\\" : "tests/"
+            "BrenoRoosevelt\\DDD\\BuildingBlocks\\" : "src/",
+            "BrenoRoosevelt\\DDD\\BuildingBlocks\\Test\\" : "tests/"
         }
     }
 }

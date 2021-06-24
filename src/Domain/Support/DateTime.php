@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DddBuildingBlocks\Domain\Support;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
-use BrenoRoosevelt\DddBuildingBlocks\Domain\Comparison;
-use BrenoRoosevelt\DddBuildingBlocks\Domain\SpecificationTrait;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Comparison;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\SpecificationTrait;
 use DateTimeImmutable;
 
 class DateTime extends DateTimeImmutable

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DddBuildingBlocks\Application;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Application;
 
-use BrenoRoosevelt\DddBuildingBlocks\Domain\ToDto;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ToDto;
 
 abstract class DtoAssembler
 {
