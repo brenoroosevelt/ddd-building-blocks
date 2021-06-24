@@ -29,7 +29,7 @@ class Payload implements DataTransferObject, JsonSerializable
         return $this->data[$name] ?? null;
     }
 
-    public function has($name)
+    public function has($name): bool
     {
         return array_key_exists($name, $this->data);
     }
