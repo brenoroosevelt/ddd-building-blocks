@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Application\DtoAssembler;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification\SpecificationTrait;
 
 abstract class Entity implements Identifiable, Comparable, ToDto
 {
@@ -22,6 +23,10 @@ abstract class Entity implements Identifiable, Comparable, ToDto
         $this->id = $id;
     }
 
+    /**
+     * @param static $v
+     * @return bool
+     */
     public function equals($v): bool
     {
         return $v instanceof $this && $this->getId()->equals($v->getId());

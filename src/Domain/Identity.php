@@ -5,4 +5,5 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 abstract class Identity extends ValueObject
 {
+    public abstract function __toString(): string;
 }

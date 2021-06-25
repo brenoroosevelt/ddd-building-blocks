@@ -15,6 +15,7 @@ final class EventProvider
         $this->events[] = $event;
     }
 
+    /** @return Generator|DomainEvent[] */
     public function releaseEvents(): Generator
     {
         while ($event = array_shift($this->events)) {

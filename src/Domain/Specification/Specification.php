@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification;
 
 interface Specification
 {

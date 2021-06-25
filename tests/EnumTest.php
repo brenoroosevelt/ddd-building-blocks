@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Test;
 
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification\Spec;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\DateTime;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\IntegerType;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Sample\Recent;
@@ -20,5 +21,6 @@ class EnumTest extends TestCase
 
         $x = new IntegerType(1);
         $this->assertTrue($x->equals(1));
+
     }
 }
