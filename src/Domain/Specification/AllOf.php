@@ -11,7 +11,7 @@ class AllOf implements Specification
     public function __construct(Specification $specification, Specification ...$specifications)
     {
         $specifications[] = $specification;
-        $this->specifications[] = $specifications;
+        $this->specifications = $specifications;
     }
 
     public function isSatisfiedBy($candidate): bool
