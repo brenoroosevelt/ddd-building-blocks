@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification;
 
-class Spec
+final class Spec
 {
     public static function and(Specification $specification, Specification ...$specifications): Specification
     {
