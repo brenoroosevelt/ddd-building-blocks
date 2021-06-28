@@ -13,14 +13,14 @@ abstract class Entity implements Identifiable, Comparable, ToDto
 
     protected Identity $id;
 
+    public function __construct(Identity $id)
+    {
+        $this->id = $id;
+    }
+
     public function getId(): Identity
     {
         return $this->id;
-    }
-
-    protected function setIdentity(Identity $id): void
-    {
-        $this->id = $id;
     }
 
     /**
