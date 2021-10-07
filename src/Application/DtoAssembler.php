@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Application;
 
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\DataTransferObject;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ToDto;
 
 abstract class DtoAssembler
