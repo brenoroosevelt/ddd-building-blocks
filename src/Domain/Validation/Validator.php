@@ -40,7 +40,7 @@ class Validator
 
     public function getErrors(array $data): ValidationResult
     {
-        $notification = ValidationResult::empty();
+        $notification = ValidationResult::ok();
         foreach ($this->rules as $name => $rules) {
             $value = $data[$name] ?? null;
             if ($this->allowsEmpty($name) && empty($value)) {

@@ -5,16 +5,11 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Exception\ValidationErrors;
 
-class ValidationResult implements ValidationResultInterface
+final class ValidationResult
 {
     const EMPTY_FIELD = '_errors';
 
     private array $errors = [];
-
-    public static function empty(): self
-    {
-        return new self();
-    }
 
     public static function ok(): self
     {
@@ -43,7 +38,7 @@ class ValidationResult implements ValidationResultInterface
 
     public function field(string $field): self
     {
-        $instance = self::empty();
+        $instance = self::ok();
         if (isset($this->errors[$field])) {
             $instance->errors[$field] = $this->errors[$field];
         }
