@@ -2,8 +2,9 @@
     "name": "brenoroosevelt/ddd-building-blocks",
     "description": "",
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
         "ext-json": "*",
+        "ramsey/uuid": "*",
         "brenoroosevelt/php-specifications": "*"
     },
     "require-dev": {
