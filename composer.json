@@ -2,16 +2,18 @@
     "name": "brenoroosevelt/ddd-building-blocks",
     "description": "",
     "require": {
-        "php": "^8",
-        "ext-json": "*"
+        "php": "^7.4",
+        "ext-json": "*",
+        "brenoroosevelt/php-specifications": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "9.5.*"
+        "phpunit/phpunit": "9.5.6"
     },
     "autoload": {
         "psr-4": {
             "BrenoRoosevelt\\DDD\\BuildingBlocks\\" : "src/",
             "BrenoRoosevelt\\DDD\\BuildingBlocks\\Test\\" : "tests/"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }

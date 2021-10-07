@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
+
+use BrenoRoosevelt\Specification\Specification;
 
 trait SpecificationTrait
 {

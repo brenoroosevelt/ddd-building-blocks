@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
-trait Comparison
+trait ComparisonTrait
 {
     public abstract function equals($v): bool;
 

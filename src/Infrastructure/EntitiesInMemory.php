@@ -6,7 +6,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Entity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Exception\EntityNotFound;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification\Specification;
+use BrenoRoosevelt\Specification\Specification;
 use Exception;
 
 trait EntitiesInMemory
