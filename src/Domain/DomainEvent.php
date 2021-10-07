@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use DateTimeImmutable;
 
 abstract class DomainEvent implements Identifiable

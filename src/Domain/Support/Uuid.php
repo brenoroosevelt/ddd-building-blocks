@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
+
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 
 class Uuid extends Identity
 {

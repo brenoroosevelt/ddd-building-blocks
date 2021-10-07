@@ -22,7 +22,7 @@ class IntegerValue extends ValueObject
         return $this->value;
     }
 
-    public function format(int $decimals = 2, string $decimalSeparator = ',', string $thousandsSeparator = '.'): string
+    public function format(int $decimals = 0, string $decimalSeparator = ',', string $thousandsSeparator = '.'): string
     {
         return number_format($this->value, $decimals, $decimalSeparator, $thousandsSeparator);
     }
