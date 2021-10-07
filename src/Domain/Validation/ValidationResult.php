@@ -36,16 +36,6 @@ final class ValidationResult
         return $this;
     }
 
-    public function field(string $field): self
-    {
-        $instance = self::ok();
-        if (isset($this->errors[$field])) {
-            $instance->errors[$field] = $this->errors[$field];
-        }
-
-        return $instance;
-    }
-
     public function getErrors(): array
     {
         return $this->errors;
