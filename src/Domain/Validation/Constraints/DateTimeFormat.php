@@ -8,7 +8,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
 use DateTime;
 
-#[Attribute]
+#[Attribute(Attribute::TARGET_PROPERTY)]
 class DateTimeFormat implements Constraint
 {
     public function __construct(private string $format)

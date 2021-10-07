@@ -5,7 +5,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\UuidValidation;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Uuid as UuidValidation;
 
 class Uuid extends Identity
 {
