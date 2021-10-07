@@ -6,10 +6,10 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Test;
 use BrenoRoosevelt\DDD\BuildingBlocks\Application\Role;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification\Spec;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\DateTime;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\IntegerType;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\IntegerValue;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Sample\Recent;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Sample\Today;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\StringType;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\StringValue;
 use PHPUnit\Framework\TestCase;
 
 class EnumTest extends TestCase
@@ -20,7 +20,7 @@ class EnumTest extends TestCase
         $obj2 = new ObjetoValor(new Class1("10"));
         $this->assertTrue($obj1->equals($obj2));
 
-        $x = new IntegerType(1);
+        $x = new IntegerValue(1);
         $this->assertTrue($x->equals(1));
 
         $role = Role::SECRETARIA();

@@ -4,14 +4,8 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class AllowsEmpty implements Constraint
+class AllowsEmpty extends AlwaysOk
 {
-    public function validate($input, array $context = []): ValidationResult
-    {
-        return ValidationResult::ok();
-    }
 }

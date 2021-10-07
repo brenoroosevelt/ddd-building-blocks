@@ -7,7 +7,7 @@ use InvalidArgumentException;
 use ReflectionClass;
 use Throwable;
 
-abstract class Enum extends StringType
+abstract class Enum extends StringValue
 {
     private static array $values;
 
