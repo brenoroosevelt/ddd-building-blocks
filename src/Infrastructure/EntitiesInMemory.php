@@ -4,22 +4,27 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Entity;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Exception\EntityNotFound;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification\Specification;
-use DomainException;
 use Exception;
 
 trait EntitiesInMemory
 {
-    protected array $entities;
+    protected array $entities = [];
 
-    protected function ofId(Identity $id)
+    public function ofId(Identity $id): Entity
     {
-        if (!array_key_exists((string) $id, $this->entities)) {
+        if (!$this->hasId($id)) {
             throw $this->notFoundException($id);
         }
 
         return $this->entities[(string) $id];
+    }
+
+    public function add(Entity $entity): void
+    {
+        $this->put($entity);
     }
 
     protected function put(Entity ...$entities): void
@@ -29,22 +34,49 @@ trait EntitiesInMemory
         }
     }
 
-    protected function delete(Entity $entity): void
+    public function remove(Entity $entity): void
     {
         unset($this->entities[(string) $entity->getId()]);
     }
 
-    protected function count(): int
+    public function count(): int
     {
         return count($this->entities);
     }
 
-    protected function all(): array
+    public function isEmpty(): bool
+    {
+        return empty($this->entities);
+    }
+
+    public function has(Entity $entity): bool
+    {
+        return $this->hasId($entity->getId());
+    }
+
+    public function hasId(Identity $identity): bool
+    {
+        $id = (string) $identity;
+        return array_key_exists($id, $this->entities);
+    }
+
+    public function all(): array
     {
         return array_values($this->entities);
     }
 
-    protected function match(Specification $specification): array
+    /**
+     * @param callable $fn
+     * @return $this
+     */
+    public function filter(callable $fn)
+    {
+        $new = clone $this;
+        $new->entities = array_filter($this->entities, $fn);
+        return $new;
+    }
+
+    public function match(Specification $specification): array
     {
         $matched =
             array_filter(
@@ -55,14 +87,13 @@ trait EntitiesInMemory
         return array_values($matched);
     }
 
-    protected function notFoundException(Identity $identity): Exception
+    public function toArray(): array
     {
-        return new DomainException(
-            sprintf(
-                "[%s] Entity not found [id=%s]",
-                static::class,
-                (string) $identity
-            )
-        );
+        return $this->entities;
+    }
+
+    public function notFoundException(Identity $identity): Exception
+    {
+        return EntityNotFound::forIdentity($identity);
     }
 }

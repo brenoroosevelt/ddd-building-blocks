@@ -5,7 +5,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 abstract class AggregateRoot extends Entity
 {
-    protected function recordEvent(DomainEvent $event): void
+    protected function recordThat(DomainEvent $event): void
     {
         EventProvider::instance()->recordEvent($event);
     }

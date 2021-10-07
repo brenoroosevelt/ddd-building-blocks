@@ -5,7 +5,6 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Specification\SpecificationTrait;
 
-
 abstract class ValueObject implements Comparable
 {
     use Comparison;
