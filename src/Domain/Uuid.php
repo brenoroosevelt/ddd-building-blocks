@@ -16,9 +16,14 @@ class Uuid extends Identity
         $this->id = $id;
     }
 
-    public static function new()
+    public static function new(string $value = null)
     {
-        return new static(\Ramsey\Uuid\Uuid::uuid4()->toString());
+        return new static($value ?? \Ramsey\Uuid\Uuid::uuid4()->toString());
+    }
+
+    public function value(): string
+    {
+        return $this->id;
     }
 
     public function __toString(): string

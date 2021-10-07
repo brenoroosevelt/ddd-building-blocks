@@ -2,7 +2,7 @@
     "name": "brenoroosevelt/ddd-building-blocks",
     "description": "",
     "require": {
-        "php": ">=7.4",
+        "php": "^8",
         "ext-json": "*"
     },
     "require-dev": {

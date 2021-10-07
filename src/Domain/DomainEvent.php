@@ -5,15 +5,15 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 use DateTimeImmutable;
 
-abstract class DomainEvent
+abstract class DomainEvent implements Identifiable
 {
     private DateTimeImmutable $occurredOn;
-    private Identity $id;
+    private Identity $eventId;
 
-    public function __construct(?DateTimeImmutable $dateTime = null, ?Identity $id = null)
+    public function __construct(?DateTimeImmutable $dateTime = null, ?Identity $eventId = null)
     {
         $this->occurredOn = $dateTime ?? new DateTimeImmutable();
-        $this->id = $id ?? Uuid::new();
+        $this->eventId = $eventId ?? Uuid::new();
     }
 
     public function occurredOn(): DateTimeImmutable
@@ -21,8 +21,8 @@ abstract class DomainEvent
         return $this->occurredOn;
     }
 
-    public function id(): string
+    public function getId(): Identity
     {
-        return (string) $this->id;
+        return $this->eventId;
     }
 }
