@@ -13,8 +13,9 @@ class Email implements Constraint
     public function validate($input, array $context = []): ValidationResult
     {
         return
-            filter_var($input, FILTER_VALIDATE_EMAIL) === false ?
-                ValidationResult::problem("E-mail inválido") :
-                ValidationResult::ok();
+            is_string($input) &&
+            filter_var($input, FILTER_VALIDATE_EMAIL) !== false ?
+                ValidationResult::ok() :
+                ValidationResult::problem("E-mail inválido");
     }
 }
