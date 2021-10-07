@@ -1,15 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Entity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Exception\EntityNotFound;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\Specification\Specification;
 use Exception;
 
-trait EntitiesInMemory
+trait EntityCollectionTrait
 {
     protected array $entities = [];
 
@@ -24,14 +22,19 @@ trait EntitiesInMemory
 
     public function add(Entity $entity): void
     {
-        $this->put($entity);
+        $this->insert($entity);
     }
 
-    protected function put(Entity ...$entities): void
+    protected function insert(Entity ...$entities): void
     {
         foreach ($entities as $entity) {
+            $this->beforeInsert($entity);
             $this->entities[(string) $entity->getId()] = $entity;
         }
+    }
+
+    protected function beforeInsert(Entity $entity): void
+    {
     }
 
     public function remove(Entity $entity): void
