@@ -5,7 +5,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Exception\ValidationErrors;
 
-class ValidationResult
+class ValidationResult implements ValidationResultInterface
 {
     const EMPTY_FIELD = '_errors';
 

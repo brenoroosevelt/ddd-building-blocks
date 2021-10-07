@@ -5,6 +5,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Exception\ValidationErrors;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AllowsEmpty;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Validation;
 use ReflectionAttribute;
 use ReflectionClass;
 
