@@ -27,7 +27,7 @@ final class ValidationResult
         return $this;
     }
 
-    public function errorField(string $field, string ...$errors): self
+    public function fieldErrors(string $field, string ...$errors): self
     {
         foreach ($errors as $error) {
             $this->error($error, $field);

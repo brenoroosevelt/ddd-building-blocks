@@ -50,7 +50,7 @@ class Validator
             /** @var Constraint $rule */
             foreach ($rules as $rule) {
                 $result = $rule->validate($value, $data);
-                $notification->errorField($name, ...$result->messages());
+                $notification->fieldErrors($name, ...$result->messages());
             }
         }
 
