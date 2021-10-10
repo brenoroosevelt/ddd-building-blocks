@@ -8,6 +8,8 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\UseRepository;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotEmpty;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Validator;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ValueObject;
 use OniBus\Attributes\CommandHandler;
 
 #[UseRepository(UserRepository::class)]
@@ -32,7 +34,7 @@ class User extends AggregateRoot
     }
 
     #[CommandHandler]
-    public function changeName(ChangeName $command): void
+    public function changeName(ChangeName $command, UserRepository $repository): void
     {
         $this->setName($command->name);
     }
