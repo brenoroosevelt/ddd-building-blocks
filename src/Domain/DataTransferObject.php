@@ -15,7 +15,7 @@ class DataTransferObject
             $args = $args[0];
         }
 
-        $this->getValidator()->validate($args);
+        $this->getValidator()->validateOrFail($args);
         //$this->castValues($args);
         //$this->getPostValidator()->validate($args);
         foreach ($args as $name => $value) {

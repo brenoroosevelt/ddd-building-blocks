@@ -38,7 +38,7 @@ class Validator
         return $this;
     }
 
-    public function getErrors(array $data): ValidationResult
+    public function validate(array $data): ValidationResult
     {
         $notification = ValidationResult::ok();
         foreach ($this->rules as $name => $rules) {
@@ -57,9 +57,9 @@ class Validator
         return $notification;
     }
 
-    public function validate(array $data): void
+    public function validateOrFail(array $data): void
     {
-        $result = $this->getErrors($data);
+        $result = $this->validate($data);
         if ($result->hasErrors()) {
             throw new ValidationErrors($result->getErrors());
         }
