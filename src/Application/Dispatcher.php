@@ -44,7 +44,7 @@ class Dispatcher implements Chain
         foreach ($handlers as $classMethod) {
             $reflectionMethod = new ReflectionMethod($classMethod->class(), $classMethod->method());
             $repository = $this->repository($reflectionMethod);
-            if ($repository instanceof Repository && $message instanceof Identifiable) {
+            if ($repository instanceof Repository) {
                 $result = $this->processAggregateRoot($repository, $message, $reflectionMethod);
             } else {
                 $instance = $this->container->get($classMethod->class());
@@ -57,14 +57,16 @@ class Dispatcher implements Chain
 
     private function processAggregateRoot(
         Repository $repository,
-        Identifiable $message,
+        Message $message,
         ReflectionMethod $reflectionMethod
     ) {
         if ($reflectionMethod->isStatic()) {
             $instance = $this->invoke($reflectionMethod, $message, null);
-        } else {
+        } elseif ($message instanceof Identifiable) {
             $instance = $repository->ofId($message->getId());
             $this->invoke($reflectionMethod, $message, $instance);
+        } else {
+            throw new RuntimeException('Unprocessable aggregate');
         }
 
         if ($instance instanceof AggregateRoot) {
