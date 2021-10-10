@@ -21,11 +21,13 @@ class User extends AggregateRoot
         parent::__construct($id);
         $this->setName($name);
         $this->active = $active;
+        $this->recordThat(new UserWasCreated((string) $this->id));
     }
 
     #[CommandHandler]
     public static function newUser(CreateUser $command): self
     {
+
         return new self(Uuid::new(), $command->name, true);
     }
 
@@ -39,6 +41,7 @@ class User extends AggregateRoot
     public function deactivate(DeactivateUser $command): void
     {
         $this->active = false;
+        $this->recordThat(new UserWasDeactivated((string) $this->id));
     }
 
     private function setName(string $name): void
