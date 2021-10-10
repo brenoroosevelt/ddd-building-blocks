@@ -20,7 +20,7 @@ trait EntityCollectionTrait
         return $this->entities[(string) $id];
     }
 
-    public function add(Entity $entity): void
+    public function save(Entity $entity): void
     {
         $this->insert($entity);
     }

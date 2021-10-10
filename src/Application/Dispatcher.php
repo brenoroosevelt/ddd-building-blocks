@@ -85,7 +85,7 @@ class Dispatcher implements Chain
     private function repository(ReflectionMethod $reflectionMethod): ?Repository
     {
         $class = $reflectionMethod->getDeclaringClass();
-        if (is_subclass_of($class->getName(), AggregateRoot::class, true)) {
+        if (!is_subclass_of($class->getName(), AggregateRoot::class, true)) {
             return null;
         }
 

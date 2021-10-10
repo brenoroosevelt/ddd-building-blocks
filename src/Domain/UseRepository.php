@@ -11,7 +11,7 @@ class UseRepository
 {
     public function __construct(public string $repository)
     {
-        if (is_subclass_of($this->repository, Repository::class, true)) {
+        if (!is_subclass_of($this->repository, Repository::class, true)) {
             throw new UnexpectedValueException(
                 sprintf('Invalid repository class: %s', $this->repository)
             );

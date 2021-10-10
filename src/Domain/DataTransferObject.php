@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Validator;
-use ReflectionAttribute;
-use ReflectionClass;
+use DateTime;
+use DateTimeImmutable;
+use ReflectionProperty;
 
 class DataTransferObject
 {
@@ -16,40 +17,34 @@ class DataTransferObject
         }
 
         $this->getValidator()->validateOrFail($args);
-        //$this->castValues($args);
-        //$this->getPostValidator()->validate($args);
         foreach ($args as $name => $value) {
-            if (property_exists($this, $name)) {
-                $this->{$name} = $value;
-            }
+            $this->setValue($name, $value);
         }
+    }
+
+    private function setValue(string $property, $value): void
+    {
+        if (!property_exists($this, $property)) {
+            return;
+        }
+
+        $reflectionProperty = new ReflectionProperty($this, $property);
+        $type = $reflectionProperty->getType()?->getName();
+
+        $this->{$property} = match ($type) {
+            DateTimeImmutable::class => new DateTimeImmutable($value),
+            DateTime::class => new DateTime($value),
+            'int'       => (int) $value,
+            'string'    => (string) $value,
+            'float'     => (float) $value,
+            'boolean'   => (bool) $value,
+            'array'     => (array) $value,
+            default     => $value,
+        };
     }
 
     protected function getValidator(): Validator
     {
         return Validator::fromAttributes($this);
     }
-
-//    public function getPostValidator(): Validator
-//    {
-//        return Validator::fromAttributes($this, PostValidation::class);
-//    }
-//
-//    private function castValues(array &$raw = []): void
-//    {
-//        foreach ((new ReflectionClass($this))->getProperties() as $property) {
-//            $name = $property->getName();
-//            if (!array_key_exists($name, $raw)) {
-//                continue;
-//            }
-//
-//            $attribute =
-//                $property->getAttributes(Cast::class, ReflectionAttribute::IS_INSTANCEOF)[0] ?? null;
-//            if ($attribute instanceof ReflectionAttribute) {
-//                /** @var Cast $castWith */
-//                $castWith = $attribute->newInstance();
-//                $raw[$name] = $castWith->caster()->cast($raw[$name]);
-//            }
-//        }
-//    }
 }
