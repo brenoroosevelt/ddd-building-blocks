@@ -53,8 +53,8 @@ class User extends AggregateRoot
 
     private function setName(string $name): void
     {
-        $validation = new Validation(NotEmpty::class, 'O nome não pode ser vazio');
-        $validation->validate($name)->guard();
+        $validation = new Validation(NotEmpty::class, 'O nome do usuário não pode ser vazio');
+        $validation->validateOrFail($name);
         $this->name = $name;
     }
 

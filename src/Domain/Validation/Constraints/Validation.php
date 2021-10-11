@@ -9,7 +9,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
 use UnexpectedValueException;
 
 #[Attribute(Attribute::IS_REPEATABLE | Attribute::TARGET_PROPERTY)]
-class Validation implements Constraint
+class Validation extends AbstractConstraint
 {
     private Constraint $constraint;
 
