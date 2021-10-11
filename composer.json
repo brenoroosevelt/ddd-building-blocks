@@ -6,7 +6,9 @@
         "ext-json": "*",
         "ramsey/uuid": "*",
         "brenoroosevelt/php-specifications": "*",
-        "brenoroosevelt/oni-bus": "@stable"
+        "brenoroosevelt/oni-bus": "@stable",
+        "brenoroosevelt/php-attributes": "@stable",
+        "brenoroosevelt/habemus": "@stable"
     },
     "require-dev": {
         "phpunit/phpunit": "9.5.6"

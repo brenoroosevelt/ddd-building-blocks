@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Test;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Application\Dispatcher;
+use BrenoRoosevelt\DDD\BuildingBlocks\Application\EventDispatcher;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\DeactivateUser;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\ChangeName;
@@ -12,6 +13,8 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Sample\InMemoryUserRepository;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\User;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\UserRepository;
 use Habemus\Container;
+use OniBus\Bus;
+use OniBus\BusChain;
 use OniBus\Handler\ClassMethod\ClassMethod;
 use PHPUnit\Framework\TestCase;
 
@@ -19,6 +22,15 @@ class SampleTest extends TestCase
 {
     private Container $container;
     private UserRepository $repository;
+
+    private function handlers(): array
+    {
+        return [
+            new ClassMethod(CreateUser::class, User::class, 'newUser'),
+            new ClassMethod(ChangeName::class, User::class, 'changeName'),
+            new ClassMethod(DeactivateUser::class, User::class, 'deactivate'),
+        ];
+    }
 
     public function setUp(): void
     {
@@ -40,16 +52,28 @@ class SampleTest extends TestCase
         return
             new Dispatcher(
                 $this->container,
-                new ClassMethod(CreateUser::class, User::class, 'newUser'),
-                new ClassMethod(ChangeName::class, User::class, 'changeName'),
-                new ClassMethod(DeactivateUser::class, User::class, 'deactivate'),
+                ...$this->handlers()
             );
+    }
+
+    public function eventDispatcher(): EventDispatcher
+    {
+        return
+            new EventDispatcher(
+                $this->container,
+                ...$this->handlers()
+            );
+    }
+
+    public function bus(): Bus
+    {
+        return new BusChain($this->eventDispatcher(), $this->dispatcher());
     }
 
     public function testCreateUser()
     {
         /** @var User $newUser */
-        $newUser = $this->dispatcher()->dispatch(
+        $newUser = $this->bus()->dispatch(
             new CreateUser(['name' => 'fulano'])
         );
 
@@ -60,7 +84,7 @@ class SampleTest extends TestCase
     public function testChangeName()
     {
         $id = Uuid::new(InMemoryUserRepository::id);
-        $this->dispatcher()->dispatch(
+        $this->bus()->dispatch(
             new ChangeName(['id'=> (string) $id, 'name' => 'outro nome'])
         );
 
@@ -71,7 +95,7 @@ class SampleTest extends TestCase
     public function testDeactivateUser()
     {
         $id = Uuid::new(InMemoryUserRepository::id);
-        $this->dispatcher()->dispatch(
+        $this->bus()->dispatch(
             new DeactivateUser(['id'=> (string) $id])
         );
 

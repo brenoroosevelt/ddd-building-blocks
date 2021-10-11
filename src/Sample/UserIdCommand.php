@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Sample;
 
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\IdentityOf;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\DataTransferObject;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identifiable;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Uuid;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid as Id;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\UuidValidator;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use OniBus\Command\Command;
 
-class UserIdCommand extends DataTransferObject implements Command, Identifiable
+class UserIdCommand extends DataTransferObject implements Command
 {
-    #[Uuid]
+    #[UuidValidator]
     public string $id;
 
-    public function getId(): Identity
+    #[IdentityOf(User::class)]
+    public function getUserId(): Uuid
     {
-        return Id::new($this->id);
+        return Uuid::new($this->id);
     }
 }

@@ -8,7 +8,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Uuid implements Constraint
+class UuidValidator implements Constraint
 {
     public function validate($input, array $context = []): ValidationResult
     {

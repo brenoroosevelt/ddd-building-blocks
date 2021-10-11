@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
+namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes;
 
 use Attribute;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Repository;
 use UnexpectedValueException;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class UseRepository
+class WithRepository
 {
     public function __construct(public string $repository)
     {

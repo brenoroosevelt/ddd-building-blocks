@@ -6,22 +6,23 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Sample;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\AggregateRoot;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\UseRepository;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\WithRepository;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotEmpty;
 use OniBus\Attributes\CommandHandler;
 
-#[UseRepository(UserRepository::class)]
+#[WithRepository(UserRepository::class)]
 class User extends AggregateRoot
 {
+    private Uuid $userId;
     private string $name;
     private bool $active;
 
-    public function __construct(Identity $id, string $name, bool $active)
+    public function __construct(Uuid $userId, string $name, bool $active)
     {
-        parent::__construct($id);
+        $this->userId = $userId;
         $this->setName($name);
         $this->active = $active;
-        $this->recordThat(new UserWasCreated((string) $this->id));
+        $this->recordThat(new UserWasCreated((string) $this->userId));
     }
 
     #[CommandHandler]
@@ -40,7 +41,7 @@ class User extends AggregateRoot
     public function deactivate(DeactivateUser $command): void
     {
         $this->active = false;
-        $this->recordThat(new UserWasDeactivated((string) $this->id));
+        $this->recordThat(new UserWasDeactivated((string) $this->userId));
     }
 
     private function setName(string $name): void
@@ -57,5 +58,10 @@ class User extends AggregateRoot
     public function isActive(): bool
     {
         return $this->active;
+    }
+
+    public function getId(): Identity
+    {
+        return $this->userId;
     }
 }

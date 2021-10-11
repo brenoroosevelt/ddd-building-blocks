@@ -11,7 +11,7 @@ trait EntityCollectionTrait
 {
     protected array $entities = [];
 
-    public function ofId(Identity $id): Entity
+    public function ofId($id)
     {
         if (!$this->hasId($id)) {
             throw $this->notFoundException($id);
@@ -20,7 +20,7 @@ trait EntityCollectionTrait
         return $this->entities[(string) $id];
     }
 
-    public function save(Entity $entity): void
+    public function save($entity)
     {
         $this->insert($entity);
     }

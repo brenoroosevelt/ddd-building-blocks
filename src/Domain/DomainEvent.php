@@ -5,8 +5,9 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use DateTimeImmutable;
+use OniBus\Event\Event;
 
-abstract class DomainEvent implements Identifiable
+abstract class DomainEvent implements Event, Identifiable
 {
     private DateTimeImmutable $occurredOn;
     private Identity $eventId;

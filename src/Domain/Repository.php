@@ -5,6 +5,6 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 interface Repository
 {
-    public function ofId(Identity $id): Entity;
-    public function save(Entity $entity);
+    public function ofId($id);
+    public function save($entity);
 }

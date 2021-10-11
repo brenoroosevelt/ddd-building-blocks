@@ -3,19 +3,23 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Application;
 
+use Attribute;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\AggregateRoot;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identifiable;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\IdentityOf;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Entity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Repository;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\UseRepository;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\WithRepository;
+use BrenoRoosevelt\PhpAttributes\Attributes;
+use BrenoRoosevelt\PhpAttributes\ParsedAttribute;
 use OniBus\Chain;
 use OniBus\ChainTrait;
 use OniBus\Handler\ClassMethod\ClassMethod;
 use OniBus\Message;
 use OniBus\NamedMessage;
 use Psr\Container\ContainerInterface;
-use ReflectionAttribute;
 use ReflectionMethod;
 use ReflectionNamedType;
+use ReflectionProperty;
 use RuntimeException;
 
 class Dispatcher implements Chain
@@ -38,7 +42,7 @@ class Dispatcher implements Chain
         $messageName = $message instanceof NamedMessage ? $message->getMessageName() : get_class($message);
         $handlers = array_filter($this->handlers, fn(ClassMethod $cm) => $cm->message() === $messageName);
         if (empty($handlers)) {
-            throw new RuntimeException(sprintf('No handler not found for message `%s`', $messageName));
+            $this->noHandlersFound($messageName);
         }
 
         foreach ($handlers as $classMethod) {
@@ -55,15 +59,21 @@ class Dispatcher implements Chain
         return $result;
     }
 
+    protected function noHandlersFound(string $messageName): void
+    {
+        throw new RuntimeException(sprintf('No handler were found for the message: `%s`', $messageName));
+    }
+
     private function processAggregateRoot(
         Repository $repository,
         Message $message,
         ReflectionMethod $reflectionMethod
     ) {
+        $class = $reflectionMethod->getDeclaringClass()->getName();
         if ($reflectionMethod->isStatic()) {
             $instance = $this->invoke($reflectionMethod, $message, null);
-        } elseif ($message instanceof Identifiable) {
-            $instance = $repository->ofId($message->getId());
+        } elseif (null !== ($identity = $this->getIdentityOf($class, $message))) {
+            $instance = $repository->ofId($message->getUserId());
             $this->invoke($reflectionMethod, $message, $instance);
         } else {
             throw new RuntimeException('Unprocessable aggregate');
@@ -82,15 +92,43 @@ class Dispatcher implements Chain
         return $reflectionMethod->invokeArgs($instance, $args);
     }
 
+    private function getIdentityOf(string $entityClass, Message $message)
+    {
+        $attributes = Attributes::from(
+            $message,
+            Attribute::TARGET_METHOD | Attribute::TARGET_PROPERTY,
+            IdentityOf::class
+        );
+
+        $attributes = $attributes->filter(
+            fn(ParsedAttribute $pa) => $pa->attribute()->newInstance()->target === $entityClass
+        );
+
+        /** @var ReflectionMethod|ReflectionProperty|null $target */
+        $target = $attributes->targets()[0] ?? null;
+
+        if ($target instanceof ReflectionMethod) {
+            return $target->invoke($message);
+        }
+
+        if ($target instanceof ReflectionProperty) {
+            return $target->getValue($message);
+        }
+
+        return null;
+    }
+
     private function repository(ReflectionMethod $reflectionMethod): ?Repository
     {
         $class = $reflectionMethod->getDeclaringClass();
-        if (!is_subclass_of($class->getName(), AggregateRoot::class, true)) {
+        if (!is_subclass_of($class->getName(), Entity::class, true)) {
             return null;
         }
 
-        $attribute = $class->getAttributes(UseRepository::class)[0] ?? null;
-        $repositoryClass = $attribute instanceof ReflectionAttribute ? $attribute->newInstance()->repository : null;
+        $repositoryClass =
+            Attributes::from($class, Attribute::TARGET_CLASS, WithRepository::class)
+                ->firstInstance()
+                ?->repository;
 
         return
             $repositoryClass !== null && $this->container->has($repositoryClass) ?
