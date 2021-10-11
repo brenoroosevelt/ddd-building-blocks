@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Test;
 
+use Attribute;
 use BrenoRoosevelt\DDD\BuildingBlocks\Application\Dispatcher;
 use BrenoRoosevelt\DDD\BuildingBlocks\Application\EventDispatcher;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\Handler;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\DeactivateUser;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\ChangeName;
@@ -12,10 +14,15 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Sample\CreateUser;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\InMemoryUserRepository;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\User;
 use BrenoRoosevelt\DDD\BuildingBlocks\Sample\UserRepository;
+use BrenoRoosevelt\DDD\BuildingBlocks\Sample\UserWasCreated;
+use BrenoRoosevelt\PhpAttributes\AttributesFactory;
+use BrenoRoosevelt\PhpAttributes\ParsedAttribute;
+use FlexFqcnFinder\Fqcn;
 use Habemus\Container;
 use OniBus\Bus;
 use OniBus\BusChain;
 use OniBus\Handler\ClassMethod\ClassMethod;
+use OniBus\Message;
 use PHPUnit\Framework\TestCase;
 
 class SampleTest extends TestCase
@@ -29,7 +36,45 @@ class SampleTest extends TestCase
             new ClassMethod(CreateUser::class, User::class, 'newUser'),
             new ClassMethod(ChangeName::class, User::class, 'changeName'),
             new ClassMethod(DeactivateUser::class, User::class, 'deactivate'),
+            new ClassMethod(UserWasCreated::class, User::class, 'whenUserCreated'),
         ];
+    }
+
+    private function handlers2(): array
+    {
+        $handlers = (new AttributesFactory)->fromFqcnFinder(
+            Fqcn::fromDir(__DIR__ . '/../src'),
+            Attribute::TARGET_METHOD,
+            Handler::class
+        );
+
+        return
+            array_map(
+                function (ParsedAttribute $parsedAttribute) {
+                    /** @var Handler $handler */
+                    $handler = $parsedAttribute->attribute()->newInstance();
+                    $target = $parsedAttribute->target();
+                    $message = $handler->message;
+                    if (empty($handler->message)) {
+                        foreach ($target->getParameters() as $parameter) {
+                            if ($parameter->getType() instanceof \ReflectionNamedType) {
+                                $typeHint = $parameter->getType()->getName();
+                                if(is_subclass_of($typeHint, Message::class, true)) {
+                                    $message = $typeHint;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    return new ClassMethod(
+                        $message,
+                        $target->getDeclaringClass()->getName(),
+                        $target->getName()
+                    );
+                },
+                $handlers->toArray()
+            );
     }
 
     public function setUp(): void
@@ -52,7 +97,7 @@ class SampleTest extends TestCase
         return
             new Dispatcher(
                 $this->container,
-                ...$this->handlers()
+                ...$this->handlers2()
             );
     }
 
@@ -61,7 +106,7 @@ class SampleTest extends TestCase
         return
             new EventDispatcher(
                 $this->container,
-                ...$this->handlers()
+                ...$this->handlers2()
             );
     }
 

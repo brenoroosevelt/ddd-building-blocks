@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Sample;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\AggregateRoot;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\Handler;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\WithRepository;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotEmpty;
-use OniBus\Attributes\CommandHandler;
 
 #[WithRepository(UserRepository::class)]
 class User extends AggregateRoot
@@ -25,23 +25,29 @@ class User extends AggregateRoot
         $this->recordThat(new UserWasCreated((string) $this->userId));
     }
 
-    #[CommandHandler]
+    #[Handler]
     public static function newUser(CreateUser $command): self
     {
         return new self(Uuid::new(), $command->name, true);
     }
 
-    #[CommandHandler]
-    public function changeName(ChangeName $command, UserRepository $repository): void
+    #[Handler]
+    public function changeName(UserRepository $repository, ChangeName $command, ): void
     {
         $this->setName($command->name);
     }
 
-    #[CommandHandler]
-    public function deactivate(DeactivateUser $command): void
+    #[Handler(DeactivateUser::class)]
+    public function deactivate(): void
     {
         $this->active = false;
         $this->recordThat(new UserWasDeactivated((string) $this->userId));
+    }
+
+    #[Handler]
+    public static function whenUserCreated(UserWasCreated $command): void
+    {
+        //var_dump($command->getId());
     }
 
     private function setName(string $name): void
