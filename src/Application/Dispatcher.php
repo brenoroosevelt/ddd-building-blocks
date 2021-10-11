@@ -73,7 +73,7 @@ class Dispatcher implements Chain
         if ($reflectionMethod->isStatic()) {
             $instance = $this->invoke($reflectionMethod, $message, null);
         } elseif (null !== ($identity = $this->getIdentityOf($class, $message))) {
-            $instance = $repository->ofId($message->getUserId());
+            $instance = $repository->ofId($identity);
             $this->invoke($reflectionMethod, $message, $instance);
         } else {
             throw new RuntimeException('Unprocessable aggregate');
