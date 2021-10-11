@@ -9,6 +9,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\WithRepository;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotEmpty;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Validation;
 
 #[WithRepository(UserRepository::class)]
 class User extends AggregateRoot
@@ -52,7 +53,8 @@ class User extends AggregateRoot
 
     private function setName(string $name): void
     {
-        (new NotEmpty)->validate($name)->guard();
+        $validation = new Validation(NotEmpty::class, 'O nome não pode ser vazio');
+        $validation->validate($name)->guard();
         $this->name = $name;
     }
 
