@@ -19,8 +19,7 @@ class User extends AggregateRoot
 
     #[FullName]
     private string $name;
-
-
+    
     private bool $active;
 
     public function __construct(Uuid $userId, string $name, bool $active)
