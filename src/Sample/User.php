@@ -8,6 +8,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\Handler;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\WithRepository;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\FullName;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotEmpty;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Validation;
 
@@ -15,7 +16,11 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Validation;
 class User extends AggregateRoot
 {
     private Uuid $userId;
+
+    #[FullName]
     private string $name;
+
+
     private bool $active;
 
     public function __construct(Uuid $userId, string $name, bool $active)

@@ -32,6 +32,19 @@ class Validator
         return $instance;
     }
 
+    public static function property($objectOrClass, string $property): self
+    {
+        $instance = new self();
+        $property = new \ReflectionProperty($objectOrClass, $property);
+        $attributes = $property->getAttributes(Constraint::class, ReflectionAttribute::IS_INSTANCEOF);
+        $propertyValidations = array_map(fn(ReflectionAttribute $r) => $r->newInstance(), $attributes);
+        foreach ($propertyValidations as $validation) {
+            $instance->rules[$property->getName()][] = $validation;
+        }
+
+        return $instance;
+    }
+
     public function add(string $name, $constraint, ?string $message = null): self
     {
         $this->rules[$name][] = new Validation($constraint, $message);
