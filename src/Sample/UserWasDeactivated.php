@@ -3,17 +3,10 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Sample;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\DomainEvent;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\DataTransferObject;
+use OniBus\Event\Event;
 
-class UserWasDeactivated extends DomainEvent
+class UserWasDeactivated extends DataTransferObject implements Event
 {
-    public function __construct(private string $userId)
-    {
-        parent::__construct();
-    }
-
-    public function userId(): string
-    {
-        return $this->userId;
-    }
+    use UserIdTrait;
 }

@@ -23,7 +23,7 @@ class User extends AggregateRoot
         $this->userId = $userId;
         $this->setName($name);
         $this->active = $active;
-        $this->recordThat(new UserWasCreated((string) $this->userId));
+        $this->recordThat(new UserWasCreated(userId: (string) $this->userId));
     }
 
     #[Handler]
@@ -42,7 +42,7 @@ class User extends AggregateRoot
     public function deactivate(): void
     {
         $this->active = false;
-        $this->recordThat(new UserWasDeactivated((string) $this->userId));
+        $this->recordThat(new UserWasDeactivated(userId: (string) $this->userId));
     }
 
     #[Handler]

@@ -3,25 +3,10 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Sample;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\IdentityOf;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\DomainEvent;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\DataTransferObject;
+use OniBus\Event\Event;
 
-class UserWasCreated extends DomainEvent
+class UserWasCreated extends DataTransferObject implements Event
 {
-    public function __construct(private string $userId)
-    {
-        parent::__construct();
-    }
-
-    public function userId(): string
-    {
-        return $this->userId;
-    }
-
-    #[IdentityOf(User::class)]
-    public function getUserId(): Uuid
-    {
-        return Uuid::new($this->userId);
-    }
+   use UserIdTrait;
 }

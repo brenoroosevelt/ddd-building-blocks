@@ -4,18 +4,19 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 use Generator;
+use OniBus\Event\Event;
 
 final class EventProvider
 {
     private static ?self $instance = null;
     private array $events;
 
-    public function recordEvent(DomainEvent $event): void
+    public function recordEvent(Event $event): void
     {
         $this->events[] = $event;
     }
 
-    /** @return Generator|DomainEvent[] */
+    /** @return Generator|Event[] */
     public function releaseEvents(): Generator
     {
         while ($event = array_shift($this->events)) {

@@ -130,7 +130,7 @@ class SampleTest extends TestCase
     {
         $id = Uuid::new(InMemoryUserRepository::id);
         $this->bus()->dispatch(
-            new ChangeName(['id'=> (string) $id, 'name' => 'outro nome'])
+            new ChangeName(['userId'=> (string) $id, 'name' => 'outro nome'])
         );
 
         $user = $this->repository->ofId($id);
@@ -141,7 +141,7 @@ class SampleTest extends TestCase
     {
         $id = Uuid::new(InMemoryUserRepository::id);
         $this->bus()->dispatch(
-            new DeactivateUser(['id'=> (string) $id])
+            new DeactivateUser(['userId'=> (string) $id])
         );
 
         $user = $this->repository->ofId($id);

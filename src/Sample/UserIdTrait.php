@@ -4,19 +4,17 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Sample;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\IdentityOf;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\DataTransferObject;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\UuidValidator;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
-use OniBus\Command\Command;
 
-class UserIdCommand extends DataTransferObject implements Command
+trait UserIdTrait
 {
     #[UuidValidator]
-    public string $id;
+    public string $userId;
 
     #[IdentityOf(User::class)]
     public function getUserId(): Uuid
     {
-        return Uuid::new($this->id);
+        return Uuid::new($this->userId);
     }
 }
