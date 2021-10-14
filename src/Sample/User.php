@@ -19,7 +19,7 @@ class User extends AggregateRoot
 
     #[FullName]
     private string $name;
-    
+
     private bool $active;
 
     public function __construct(Uuid $userId, string $name, bool $active)
@@ -45,21 +45,14 @@ class User extends AggregateRoot
     #[Handler(DeactivateUser::class)]
     public function deactivate(): void
     {
-        $this->active = false;
+        $this->setActive(false);
         $this->recordThat(new UserWasDeactivated(userId: (string) $this->userId));
     }
 
     #[Handler]
-    public static function whenUserCreated(UserWasCreated $command): void
+    public static function whenUserWasCreated(UserWasCreated $command): void
     {
         //var_dump($command->getId());
-    }
-
-    private function setName(string $name): void
-    {
-        $validation = new Validation(NotEmpty::class, 'O nome do usuário não pode ser vazio');
-        $validation->validateOrFail($name);
-        $this->name = $name;
     }
 
     public function name(): string
@@ -75,5 +68,17 @@ class User extends AggregateRoot
     public function getId(): Identity
     {
         return $this->userId;
+    }
+
+    private function setName(string $name): void
+    {
+        $validation = new Validation(NotEmpty::class, 'O nome do usuário não pode ser vazio');
+        $validation->validateOrFail($name);
+        $this->name = $name;
+    }
+
+    private function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 }
