@@ -1,6 +1,6 @@
 {
     "name": "brenoroosevelt/ddd-building-blocks",
-    "description": "",
+    "description": "DDD Building Blocks",
     "require": {
         "php": "^8.0",
         "ext-json": "*",
