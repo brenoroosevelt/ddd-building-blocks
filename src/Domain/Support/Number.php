@@ -7,7 +7,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AlwaysOk;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ValueObject;
 
-class FloatValue extends ValueObject
+class Number extends ValueObject
 {
     protected float $value;
 

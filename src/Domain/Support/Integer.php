@@ -7,7 +7,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AlwaysOk;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ValueObject;
 
-class IntegerValue extends ValueObject
+class Integer extends ValueObject
 {
     protected int $value;
 

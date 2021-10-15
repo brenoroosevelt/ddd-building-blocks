@@ -3,19 +3,12 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\UuidValidator as UuidValidation;
 
-class Uuid extends Identity
+class Uuid extends StringLiteral
 {
     protected string $id;
-
-    final public function __construct(string $id)
-    {
-        $this->getValidation()->validate($id)->guard();
-        $this->id = $id;
-    }
 
     public static function new(string $value = null)
     {
