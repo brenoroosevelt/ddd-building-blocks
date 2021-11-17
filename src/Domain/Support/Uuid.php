@@ -9,21 +9,9 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\UuidValidato
 
 class Uuid extends StringLiteral implements Identity
 {
-    protected string $id;
-
-    public static function new(string $value = null)
+    public static function new(string $value = null): self
     {
-        return new static($value ?? \Ramsey\Uuid\Uuid::uuid4()->toString());
-    }
-
-    public function value(): string
-    {
-        return $this->id;
-    }
-
-    public function __toString(): string
-    {
-        return $this->id;
+        return new self($value ?? \Ramsey\Uuid\Uuid::uuid4()->toString());
     }
 
     public function getValidation(): Constraint
