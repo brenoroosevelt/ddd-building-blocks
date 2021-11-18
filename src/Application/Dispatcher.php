@@ -8,7 +8,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\AggregateRoot;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\IdentityOf;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Entity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Repository;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\WithRepository;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\UseRepository;
 use BrenoRoosevelt\PhpAttributes\Attributes;
 use BrenoRoosevelt\PhpAttributes\ParsedAttribute;
 use OniBus\Chain;
@@ -126,7 +126,7 @@ class Dispatcher implements Chain
         }
 
         $repositoryClass =
-            Attributes::from($class, Attribute::TARGET_CLASS, WithRepository::class)
+            Attributes::from($class, Attribute::TARGET_CLASS, UseRepository::class)
                 ->firstInstance()
                 ?->repository;
 

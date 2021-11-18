@@ -8,7 +8,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Repository;
 use UnexpectedValueException;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class WithRepository
+class UseRepository
 {
     public function __construct(public string $repository)
     {

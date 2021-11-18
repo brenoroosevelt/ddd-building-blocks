@@ -7,12 +7,12 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\AggregateRoot;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\Handler;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\WithRepository;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\UseRepository;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\FullName;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotEmpty;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Validation;
 
-#[WithRepository(UserRepository::class)]
+#[UseRepository(UserRepository::class)]
 class User extends AggregateRoot
 {
     private Uuid $userId;
