@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Application;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\EventProvider;
+use OniBus\Event\EventManager;
 use OniBus\Message;
 
 class EventDispatcher extends Dispatcher
@@ -11,7 +11,7 @@ class EventDispatcher extends Dispatcher
     public function dispatch(Message $message)
     {
         $result = $this->next($message);
-        foreach (EventProvider::instance()->releaseEvents() as $domainEvent) {
+        foreach (EventManager::release() as $domainEvent) {
             parent::dispatch($domainEvent);
         }
 

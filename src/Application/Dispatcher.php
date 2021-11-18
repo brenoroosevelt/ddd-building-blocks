@@ -88,7 +88,7 @@ class Dispatcher implements Chain
 
     private function invoke(ReflectionMethod $reflectionMethod, $message, $instance)
     {
-        $args = $this->arguments($reflectionMethod, $message);
+        $args = $this->resolveArguments($reflectionMethod, $message);
         return $reflectionMethod->invokeArgs($instance, $args);
     }
 
@@ -136,7 +136,7 @@ class Dispatcher implements Chain
                 null;
     }
 
-    private function arguments(ReflectionMethod $method, Message $message): array
+    private function resolveArguments(ReflectionMethod $method, Message $message): array
     {
         $args = [];
         foreach ($method->getParameters() as $parameter) {
