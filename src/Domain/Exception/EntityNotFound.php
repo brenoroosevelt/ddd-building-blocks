@@ -8,7 +8,7 @@ use DomainException;
 
 class EntityNotFound extends DomainException
 {
-    public static function forIdentity(Identity $identity): self
+    public static function forIdentity($identity): self
     {
         return new self(
             sprintf(
