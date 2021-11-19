@@ -6,7 +6,10 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AlwaysOk;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ValueObject;
+use BrenoRoosevelt\Specification\Spec\Rule;
 use BrenoRoosevelt\Specification\Specification;
+use function BrenoRoosevelt\Specification\greaterThan;
+use function BrenoRoosevelt\Specification\lessThan;
 
 class Number extends ValueObject
 {
@@ -36,5 +39,15 @@ class Number extends ValueObject
     public function is(Specification $specification): bool
     {
         return $specification->isSatisfiedBy($this->value);
+    }
+
+    public static function positive(): Specification
+    {
+        return greaterThan(0);
+    }
+
+    public static function negative(): Specification
+    {
+        return lessThan(0);
     }
 }
