@@ -9,7 +9,9 @@ use BrenoRoosevelt\Specification\Candidate;
 abstract class Entity implements Identifiable, Comparable, ToDto
 {
     use ComparisonTrait;
-    use Candidate;
+    use Candidate {
+        isSatisfiedBy as is;
+    }
 
     /**
      * @param static $v

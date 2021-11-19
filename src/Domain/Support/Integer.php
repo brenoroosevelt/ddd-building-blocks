@@ -33,7 +33,7 @@ class Integer extends ValueObject
         return new AlwaysOk();
     }
 
-    public function isTheValue(Specification $specification): bool
+    public function is(Specification $specification): bool
     {
         return $specification->isSatisfiedBy($this->value);
     }
