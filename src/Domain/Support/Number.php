@@ -6,6 +6,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AlwaysOk;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ValueObject;
+use BrenoRoosevelt\Specification\Specification;
 
 class Number extends ValueObject
 {
@@ -30,5 +31,10 @@ class Number extends ValueObject
     public function getValidation(): Constraint
     {
         return new AlwaysOk();
+    }
+
+    public function isTheValue(Specification $specification): bool
+    {
+        return $specification->isSatisfiedBy($this->value);
     }
 }
