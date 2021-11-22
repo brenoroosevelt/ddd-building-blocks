@@ -10,12 +10,16 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class PaginatedCollection implements JsonSerializable
 {
-    const WRAPPER_KEY = 'data';
+    const WRAPPER_DATA_KEY = 'data';
+    const WRAPPER_PAGINATION_KEY = 'pagination';
+    const WRAPPER_LINKS_KEY = '_links';
 
     public function __construct(
         private PagerfantaInterface $data,
         private ?ServerRequestInterface $request = null,
-        private string $wrapperKey = self::WRAPPER_KEY
+        private string $wrapperDataKey = self::WRAPPER_DATA_KEY,
+        private string $wrapperPaginationKey = self::WRAPPER_PAGINATION_KEY,
+        private string $wrapperPaginationLinksKey = self::WRAPPER_LINKS_KEY
     ) {
     }
 
@@ -24,12 +28,13 @@ class PaginatedCollection implements JsonSerializable
         $pagination = new Pagination();
 
         $info = [
-            $this->wrapperKey => $this->data->jsonSerialize(),
-            'pagination' => $pagination->paginationInfo($this->data)
+            $this->wrapperDataKey => $this->data->jsonSerialize(),
+            $this->wrapperPaginationKey => $pagination->paginationInfo($this->data)
         ];
 
         if ($this->request instanceof ServerRequestInterface) {
-            $info['pagination']['_links'] = $pagination->paginationLinks($this->data, $this->request);
+            $info[$this->wrapperPaginationKey][$this->wrapperPaginationLinksKey] =
+                $pagination->paginationLinks($this->data, $this->request);
         }
 
         return $info;
