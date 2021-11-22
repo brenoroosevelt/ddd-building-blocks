@@ -15,7 +15,7 @@ class PaginatedCollection implements JsonSerializable
     const WRAPPER_LINKS_KEY = '_links';
 
     public function __construct(
-        private PagerfantaInterface $data,
+        private $data,
         private ?ServerRequestInterface $request = null,
         private string $wrapperDataKey = self::WRAPPER_DATA_KEY,
         private string $wrapperPaginationKey = self::WRAPPER_PAGINATION_KEY,
@@ -25,16 +25,20 @@ class PaginatedCollection implements JsonSerializable
 
     public function jsonSerialize(): array
     {
-        $pagination = new Pagination();
+        $info[$this->wrapperDataKey] =
+            $this->data instanceof JsonSerializable ?
+                $this->data->jsonSerialize() :
+                $this->data;
 
-        $info = [
-            $this->wrapperDataKey => $this->data->jsonSerialize(),
-            $this->wrapperPaginationKey => $pagination->paginationInfo($this->data)
-        ];
+        if ($this->data instanceof PagerfantaInterface) {
+            $pagination = new Pagination();
 
-        if ($this->request instanceof ServerRequestInterface) {
-            $info[$this->wrapperPaginationKey][$this->wrapperPaginationLinksKey] =
-                $pagination->paginationLinks($this->data, $this->request);
+            $info[$this->wrapperPaginationKey] = $pagination->paginationInfo($this->data);
+
+            if ($this->request instanceof ServerRequestInterface) {
+                $info[$this->wrapperPaginationKey][$this->wrapperPaginationLinksKey] =
+                    $pagination->paginationLinks($this->data, $this->request);
+            }
         }
 
         return $info;
