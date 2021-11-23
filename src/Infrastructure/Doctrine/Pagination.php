@@ -53,7 +53,7 @@ class Pagination
         return $pager;
     }
 
-    public function paginationInfo(PagerfantaInterface $data): array
+    public static function paginationInfo(PagerfantaInterface $data): array
     {
         return [
             'page' => $data->getCurrentPage(),
@@ -66,7 +66,7 @@ class Pagination
         ];
     }
 
-    public function paginationLinks(PagerfantaInterface $data, ServerRequestInterface $request): array
+    public static function paginationLinks(PagerfantaInterface $data, ServerRequestInterface $request): array
     {
         $current = $data->getCurrentPage();
         $prev = $current - 1;
@@ -74,15 +74,15 @@ class Pagination
         $last = $data->getNbPages();
 
         return [
-            'self' => $this->getPageLink($current, $request),
-            'first' => $this->getPageLink(1, $request),
-            'last' => $last ? $this->getPageLink($last, $request) : null,
-            'prev' => $prev ? $this->getPageLink($prev, $request) : null,
-            'next' => $next <= $last ? $this->getPageLink($next, $request) : null,
+            'self' => self::getPageLink($current, $request),
+            'first' => self::getPageLink(1, $request),
+            'last' => $last ? self::getPageLink($last, $request) : null,
+            'prev' => $prev ? self::getPageLink($prev, $request) : null,
+            'next' => $next <= $last ? self::getPageLink($next, $request) : null,
         ];
     }
 
-    protected function getPageLink(int $page, ServerRequestInterface $request): string
+    public static function getPageLink(int $page, ServerRequestInterface $request): string
     {
         $query = array_merge($request->getQueryParams(), ['page' => $page]);
         return $request->getUri()->getPath() . '?' . http_build_query($query);

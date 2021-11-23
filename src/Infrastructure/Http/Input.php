@@ -19,36 +19,36 @@ class Input
         $this->attributes = $this->request->getAttributes();
     }
 
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         return $this->query[$key] ?? $this->body[$key] ?? $this->attributes[$key] ?? $default;
     }
 
-    public function getString($key, ?string $default = null): ?string
+    public function getString(string $key, ?string $default = null): ?string
     {
         $value = $this->get($key);
         return $value !== null ? (string) $value: $default;
     }
 
-    public function getInt($key, ?int $default = null): ?int
+    public function getInt(string $key, ?int $default = null): ?int
     {
         $value = $this->get($key);
         return $value !== null ? (int) $value: $default;
     }
 
-    public function getFloat($key, ?float $default = null): ?float
+    public function getFloat(string $key, ?float $default = null): ?float
     {
         $value = $this->get($key);
         return $value !== null ? (float) $value: $default;
     }
 
-    public function getBoolean($key, ?bool $default = null): ?bool
+    public function getBoolean(string $key, ?bool $default = null): ?bool
     {
         $value = $this->get($key);
         return $value !== null ? (bool) $value: $default;
     }
 
-    public function getDateTime($key, ?string $default = null): ?DateTimeImmutable
+    public function getDateTime(string $key, ?string $default = null): ?DateTimeImmutable
     {
         $value = $this->get($key);
         $defaultValue = $default !== null ? new DateTimeImmutable($default) : null;
