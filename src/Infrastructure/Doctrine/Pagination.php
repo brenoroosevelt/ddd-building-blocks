@@ -6,6 +6,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure\Doctrine;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\AdapterInterface;
+use Pagerfanta\Doctrine\DBAL\SingleTableQueryAdapter;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
@@ -30,9 +31,24 @@ class Pagination
 
     public static function queryDBAL(
         \Doctrine\DBAL\Query\QueryBuilder|QueryBuilder|Query $query,
-        callable $countQueryBuilderModifier
+        string $countField
     ): Pagination {
-        $adapter = new \Pagerfanta\Doctrine\DBAL\QueryAdapter($query, $countQueryBuilderModifier);
+
+        $joins = $query->getQueryPart('join');
+        $hasQueryBuilderJoins = !empty($joins);
+
+        $adapter =
+            $hasQueryBuilderJoins ?
+                new \Pagerfanta\Doctrine\DBAL\QueryAdapter(
+                    $query,
+                    function(\Doctrine\DBAL\Query\QueryBuilder $qb) use ($countField) {
+                        return $qb
+                            ->select("COUNT(DISTINCT $countField) AS total_results")
+                            ->setMaxResults(1);
+                    }
+                ) :
+                new SingleTableQueryAdapter($query, $countField);
+
         return new Pagination($adapter);
     }
 
