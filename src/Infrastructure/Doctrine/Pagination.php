@@ -30,7 +30,7 @@ class Pagination
     }
 
     public static function queryDBAL(
-        \Doctrine\DBAL\Query\QueryBuilder|QueryBuilder|Query $query,
+        \Doctrine\DBAL\Query\QueryBuilder $query,
         string $countField
     ): Pagination {
 
