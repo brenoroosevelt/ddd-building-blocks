@@ -24,7 +24,7 @@ class Sorting
 
     public function addDefault(string $alias, string $direction = 'asc'): self
     {
-        $this->default[$alias] = $this->parseDirection($direction);
+        $this->default[$alias] = Order::parseDirection($direction);
         return $this;
     }
 
@@ -43,20 +43,11 @@ class Sorting
             array_filter($orderBy, fn($v, $i) => array_key_exists($i, $this->fields), ARRAY_FILTER_USE_BOTH);
 
         foreach ($orderBy as $alias => $direction) {
-            $direction =$this->parseDirection($direction);
+            $direction = Order::parseDirection($direction);
             $field = $this->fields[$alias];
             $queryBuilder = $queryBuilder->orderBy($field, $direction);
         }
 
         return $queryBuilder;
-    }
-
-    private function parseDirection($direction): string
-    {
-        return
-            match (mb_strtolower((string) $direction)) {
-                'desc' => 'desc',
-                default => 'asc'
-            };
     }
 }
