@@ -16,15 +16,13 @@ class Sorting
         return new self($fields);
     }
 
-    public function add(string $alias, string $field): self
+    public function add(string $alias, string $field, bool $default = false, string $direction = 'asc'): self
     {
         $this->fields[$alias] = $field;
-        return $this;
-    }
+        if ($default) {
+            $this->default[$alias] = $this->parseDirection($direction);
+        }
 
-    public function default(string $alias, string $direction = 'asc'): self
-    {
-        $this->default = [$alias => $direction];
         return $this;
     }
 
@@ -37,16 +35,20 @@ class Sorting
             array_filter($orderBy, fn($v, $i) => array_key_exists($i, $this->fields), ARRAY_FILTER_USE_BOTH);
 
         foreach ($orderBy as $alias => $direction) {
-            $direction =
-                match (mb_strtolower((string) $direction)) {
-                    'desc' => 'desc',
-                    default => 'asc'
-                };
-
+            $direction =$this->parseDirection($direction);
             $field = $this->fields[$alias];
             $queryBuilder = $queryBuilder->orderBy($field, $direction);
         }
 
         return $queryBuilder;
+    }
+
+    private function parseDirection($direction): string
+    {
+        return
+            match (mb_strtolower((string) $direction)) {
+                'desc' => 'desc',
+                default => 'asc'
+            };
     }
 }
