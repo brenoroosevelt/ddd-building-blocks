@@ -27,7 +27,7 @@ class Filter
         array $filters = []
     ): QueryBuilder {
         foreach ($filters as $alias => $value) {
-            $filter = $this->filters[$alias] ?? fn ($q, $v, $f) => $q;
+            $filter = $this->fields[$alias] ?? fn ($q, $v, $f) => $q;
             $queryBuilder = $filter($queryBuilder, $value, $filters);
         }
 
