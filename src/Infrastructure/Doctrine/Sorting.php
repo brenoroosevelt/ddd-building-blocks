@@ -26,6 +26,12 @@ class Sorting
         return $this;
     }
 
+    public function addDefault(string $alias, string $direction = 'asc'): self
+    {
+        $this->default[$alias] = $this->parseDirection($direction);
+        return $this;
+    }
+
     public function apply(
         QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $queryBuilder,
         array $orderBy = []
