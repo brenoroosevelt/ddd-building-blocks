@@ -37,10 +37,27 @@ class Filter
     public static function like(
         QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $queryBuilder,
         string $field,
-        string $value
+        string $value,
+        bool $split = false
+    ): \Doctrine\DBAL\Query\QueryBuilder|QueryBuilder {
+
+        $values = $split ? explode(' ', $value) : $value;
+        foreach ($values as $value) {
+            $paramName = 'p_' . md5(uniqid());
+            $queryBuilder = $queryBuilder->andWhere("$field LIKE :$paramName")
+                ->setParameter($paramName, '%' . addcslashes($value, '%_') . '%');
+        }
+
+        return $queryBuilder;
+    }
+
+    public static function in(
+        QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $queryBuilder,
+        string $field,
+        array $values
     ): \Doctrine\DBAL\Query\QueryBuilder|QueryBuilder {
         $paramName = 'p_' . md5(uniqid());
-        return $queryBuilder->where("$field LIKE :$paramName")
-            ->setParameter($paramName, '%' . addcslashes($value, '%_') . '%');
+        return $queryBuilder->andWhere("$field IN (:$paramName)")
+            ->setParameter($paramName, $values);
     }
 }
