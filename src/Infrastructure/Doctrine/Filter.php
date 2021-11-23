@@ -33,4 +33,14 @@ class Filter
 
         return $queryBuilder;
     }
+
+    public static function like(
+        QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $queryBuilder,
+        string $field,
+        string $value
+    ): \Doctrine\DBAL\Query\QueryBuilder|QueryBuilder {
+        $paramName = 'p_' . md5(uniqid());
+        return $queryBuilder->where("$field LIKE $paramName")
+            ->setParameter($paramName, '%' . addcslashes($value, '%_') . '%');
+    }
 }
