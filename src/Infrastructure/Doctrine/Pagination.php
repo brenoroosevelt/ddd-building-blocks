@@ -7,6 +7,8 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\AdapterInterface;
 use Pagerfanta\Doctrine\DBAL\SingleTableQueryAdapter;
+use Pagerfanta\Doctrine\DBAL\QueryAdapter as DBALQueryAdapter;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
@@ -30,18 +32,17 @@ class Pagination
     }
 
     public static function queryDBAL(
-        \Doctrine\DBAL\Query\QueryBuilder $query,
+        DBALQueryBuilder $query,
         string $countField
     ): Pagination {
-
         $joins = $query->getQueryPart('join');
         $hasQueryBuilderJoins = !empty($joins);
 
         $adapter =
             $hasQueryBuilderJoins ?
-                new \Pagerfanta\Doctrine\DBAL\QueryAdapter(
+                new DBALQueryAdapter(
                     $query,
-                    function(\Doctrine\DBAL\Query\QueryBuilder $qb) use ($countField) {
+                    function(DBALQueryBuilder $qb) use ($countField) {
                         return $qb
                             ->select("COUNT(DISTINCT $countField) AS total_results")
                             ->setMaxResults(1);
