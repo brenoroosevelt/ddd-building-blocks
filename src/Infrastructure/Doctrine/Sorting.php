@@ -16,15 +16,15 @@ class Sorting
         return new self($fields);
     }
 
-    public function by(
+    public function apply(
         QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $queryBuilder,
-        array $orderBy,
+        array $orderBy = [],
         array $default = []
     ): QueryBuilder {
+        $orderBy = !empty($orderBy) ? $orderBy : $default;
         $orderBy =
             array_filter($orderBy, fn($v, $i) => array_key_exists($i, $this->fields), ARRAY_FILTER_USE_BOTH);
 
-        $orderBy = !empty($orderBy) ? $orderBy : $default;
         foreach ($orderBy as $alias => $direction) {
             $direction =
                 match (mb_strtolower((string) $direction)) {
