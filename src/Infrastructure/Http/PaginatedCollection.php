@@ -31,13 +31,11 @@ class PaginatedCollection implements JsonSerializable
                 $this->data;
 
         if ($this->data instanceof PagerfantaInterface) {
-            $pagination = new Pagination();
-
-            $info[$this->wrapperPaginationKey] = $pagination->paginationInfo($this->data);
+            $info[$this->wrapperPaginationKey] = Pagination::paginationInfo($this->data);
 
             if ($this->request instanceof ServerRequestInterface) {
                 $info[$this->wrapperPaginationKey][$this->wrapperPaginationLinksKey] =
-                    $pagination->paginationLinks($this->data, $this->request);
+                    Pagination::paginationLinks($this->data, $this->request);
             }
         }
 
