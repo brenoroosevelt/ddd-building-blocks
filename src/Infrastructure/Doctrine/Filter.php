@@ -40,7 +40,7 @@ class Filter
         string $value
     ): \Doctrine\DBAL\Query\QueryBuilder|QueryBuilder {
         $paramName = 'p_' . md5(uniqid());
-        return $queryBuilder->where("$field LIKE $paramName")
+        return $queryBuilder->where("$field LIKE :$paramName")
             ->setParameter($paramName, '%' . addcslashes($value, '%_') . '%');
     }
 }
