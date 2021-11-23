@@ -16,19 +16,21 @@ class Sorting
         return new self($fields);
     }
 
-    public function add(string $alias, string $field, bool $default = false, string $direction = 'asc'): self
+    public function add(string $alias, string $field): self
     {
         $this->fields[$alias] = $field;
-        if ($default) {
-            $this->default[$alias] = $this->parseDirection($direction);
-        }
-
         return $this;
     }
 
     public function addDefault(string $alias, string $direction = 'asc'): self
     {
         $this->default[$alias] = $this->parseDirection($direction);
+        return $this;
+    }
+
+    public function setDefault(array $default): self
+    {
+        $this->default = $default;
         return $this;
     }
 
