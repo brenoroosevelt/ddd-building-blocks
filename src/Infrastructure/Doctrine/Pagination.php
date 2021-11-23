@@ -5,6 +5,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure\Doctrine;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Pagerfanta\Adapter\AdapterInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
@@ -14,20 +15,37 @@ class Pagination
 {
     const DEFAULT_LIMIT = 25;
 
-    public function paginate(
-        Query|QueryBuilder $query,
-        int $page,
-        int $limit = self::DEFAULT_LIMIT,
-        bool $allowOutOfRangePages = true,
+    public function __construct(private AdapterInterface $adapter)
+    {
+    }
+
+    public static function query(
+        QueryBuilder|Query $query,
         bool $fetchJoinCollection = true,
         ?bool $useOutputWalkers = null
+    ): Pagination {
+        $adapter = new QueryAdapter($query, $fetchJoinCollection, $useOutputWalkers);
+        return new Pagination($adapter);
+    }
+
+    public static function queryDBAL(
+        \Doctrine\DBAL\Query\QueryBuilder|QueryBuilder|Query $query,
+        callable $countQueryBuilderModifier
+    ): Pagination {
+        $adapter = new \Pagerfanta\Doctrine\DBAL\QueryAdapter($query, $countQueryBuilderModifier);
+        return new Pagination($adapter);
+    }
+
+    public function paginate(
+        int $page,
+        int $limit = self::DEFAULT_LIMIT,
+        bool $allowOutOfRangePages = true
     ): PagerfantaInterface {
         if ($page < 1) {
             $page = 1;
         }
-        
-        $adapter = new QueryAdapter($query, $fetchJoinCollection, $useOutputWalkers);
-        $pager = new Pagerfanta($adapter);
+
+        $pager = new Pagerfanta($this->adapter);
         $pager->setAllowOutOfRangePages($allowOutOfRangePages);
         $pager->setCurrentPage($page);
         $pager->setMaxPerPage($limit);
