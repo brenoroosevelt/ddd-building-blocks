@@ -12,17 +12,21 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Pagination
 {
+    const DEFAULT_LIMIT = 25;
+
     public function paginate(
         Query|QueryBuilder $query,
         int $page,
-        int $limit,
-        bool $allowOutOfRangePages = true
+        int $limit = self::DEFAULT_LIMIT,
+        bool $allowOutOfRangePages = true,
+        bool $fetchJoinCollection = true,
+        ?bool $useOutputWalkers = null
     ): PagerfantaInterface {
         if ($page < 1) {
             $page = 1;
         }
-
-        $adapter = new QueryAdapter($query);
+        
+        $adapter = new QueryAdapter($query, $fetchJoinCollection, $useOutputWalkers);
         $pager = new Pagerfanta($adapter);
         $pager->setAllowOutOfRangePages($allowOutOfRangePages);
         $pager->setCurrentPage($page);
@@ -36,11 +40,11 @@ class Pagination
         return [
             'page' => $data->getCurrentPage(),
             'limit' => $data->getMaxPerPage(),
-            'totalPages' => $data->getNbPages(),
-            'totalResults' => $data->getNbResults(),
-            'pageResults' => count($data->getCurrentPageResults()),
-            'nextPage' => $data->hasNextPage() ? $data->getNextPage() : null,
-            'previousPage' => $data->hasPreviousPage() ? $data->getPreviousPage() : null,
+            'total_pages' => $data->getNbPages(),
+            'total_results' => $data->getNbResults(),
+            'page_results' => count($data->getCurrentPageResults()),
+            'next_page' => $data->hasNextPage() ? $data->getNextPage() : null,
+            'previous_page' => $data->hasPreviousPage() ? $data->getPreviousPage() : null,
         ];
     }
 
