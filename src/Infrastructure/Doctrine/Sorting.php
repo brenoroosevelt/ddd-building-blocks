@@ -7,18 +7,24 @@ use Doctrine\ORM\QueryBuilder;
 
 class Sorting
 {
-    public function __construct(private array $fields = [], private array $default = [])
+    public function __construct(private array $fields = [])
     {
     }
 
-    public function setOrderBy(
+    public static function fields(array $fields = []): self
+    {
+        return new self($fields);
+    }
+
+    public function by(
         QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $queryBuilder,
-        array $orderBy
+        array $orderBy,
+        array $default = []
     ): QueryBuilder {
         $orderBy =
             array_filter($orderBy, fn($v, $i) => array_key_exists($i, $this->fields), ARRAY_FILTER_USE_BOTH);
 
-        $orderBy = !empty($orderBy) ? $orderBy : $this->default;
+        $orderBy = !empty($orderBy) ? $orderBy : $default;
         foreach ($orderBy as $alias => $direction) {
             $direction =
                 match (mb_strtolower((string) $direction)) {
