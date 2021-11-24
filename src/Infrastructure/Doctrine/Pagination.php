@@ -85,15 +85,11 @@ class Pagination
 
     public static function paginationLinks(PagerfantaInterface $data, ServerRequestInterface $request): array
     {
-        $current = $data->getCurrentPage();
-        $previousPage = $data->hasPreviousPage() ? $data->getPreviousPage() : 1;
-        $prev = Utility::range($previousPage, 1, $data->getNbPages());
-
         return [
-            'self' => self::getPageLink($current, $request),
+            'self' => self::getPageLink($data->getCurrentPage(), $request),
             'first' => self::getPageLink(1, $request),
             'last' => self::getPageLink($data->getNbPages(), $request),
-            'prev' => self::getPageLink($prev, $request),
+            'prev' => $data->hasPreviousPage() ? self::getPageLink($data->getPreviousPage(), $request) : null,
             'next' => $data->hasNextPage() ? self::getPageLink($data->getNextPage(), $request) : null,
         ];
     }
