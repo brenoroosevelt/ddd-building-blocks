@@ -11,4 +11,9 @@ class DoctrineUserRepository extends DoctrineRepository implements UserRepositor
     {
         return User::class;
     }
+
+    public function afterSave($entity): void
+    {
+        $this->entityManager->flush();
+    }
 }
