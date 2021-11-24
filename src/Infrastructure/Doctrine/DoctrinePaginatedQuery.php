@@ -5,7 +5,6 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure\Doctrine;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\PaginatedQuery;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Utility;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\PagerfantaInterface;
 
