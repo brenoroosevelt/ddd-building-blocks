@@ -11,10 +11,6 @@ use Pagerfanta\PagerfantaInterface;
 
 abstract class DoctrinePaginatedQuery implements PaginatedQuery
 {
-    public function __construct(private EntityManager $entityManager)
-    {
-    }
-
     public function paginate(
         array $filters = [],
         array $orderBy = [],
@@ -49,10 +45,5 @@ abstract class DoctrinePaginatedQuery implements PaginatedQuery
     public function maxPerPage(): ?int
     {
         return null;
-    }
-
-    public function entityManager(): EntityManager
-    {
-        return $this->entityManager;
     }
 }
