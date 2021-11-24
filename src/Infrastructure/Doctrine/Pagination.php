@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure\Doctrine;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Utility;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\AdapterInterface;
