@@ -32,6 +32,7 @@ abstract class DoctrineRepository implements Repository
 
     protected function afterSave($entity): void
     {
+        //$this->entityManager->flush();
     }
 
     public abstract function entityClass(): string;
