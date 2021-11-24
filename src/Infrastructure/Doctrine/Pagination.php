@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure\Doctrine;
 
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Utility;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\AdapterInterface;
@@ -85,13 +86,14 @@ class Pagination
     public static function paginationLinks(PagerfantaInterface $data, ServerRequestInterface $request): array
     {
         $current = $data->getCurrentPage();
-        $last = $data->getNbPages();
+        $previousPage = $data->hasPreviousPage() ? $data->getPreviousPage() : 1;
+        $prev = Utility::range($previousPage, 1, $data->getNbPages());
 
         return [
             'self' => self::getPageLink($current, $request),
             'first' => self::getPageLink(1, $request),
             'last' => self::getPageLink($data->getNbPages(), $request),
-            'prev' => $data->hasPreviousPage() ? self::getPageLink($data->getPreviousPage(), $request) : null,
+            'prev' => self::getPageLink($prev, $request),
             'next' => $data->hasNextPage() ? self::getPageLink($data->getNextPage(), $request) : null,
         ];
     }
