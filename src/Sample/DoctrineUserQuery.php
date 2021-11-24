@@ -34,6 +34,11 @@ class DoctrineUserQuery extends DoctrinePaginatedQuery implements UserQuery
                 ->add(
                     'name',
                     fn(QueryBuilder $qb, $value, array $filters) => Filter::like($qb, 'u.name', $value)
+                )
+                ->add(
+                    'active',
+                    fn(QueryBuilder $qb, $value, array $filters)
+                        => $qb->andWhere('u.active = :active')->setParameter('active', (bool) $value)
                 );
     }
 
@@ -42,6 +47,7 @@ class DoctrineUserQuery extends DoctrinePaginatedQuery implements UserQuery
         return
             Sorting::new()
                 ->add('name', 'u.name')
+                ->add('active', 'u.active')
                 ->setDefault(Order::by('name', Order::ASC));
     }
 
