@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManager;
 
 abstract class DoctrineRepository implements Repository
 {
-    public function __construct(private EntityManager $entityManager)
+    public function __construct(protected EntityManager $entityManager)
     {
     }
 
@@ -27,7 +27,11 @@ abstract class DoctrineRepository implements Repository
     public function save($entity): void
     {
         $this->entityManager->persist($entity);
-        $this->entityManager->flush();
+        $this->afterSave($entity);
+    }
+
+    protected function afterSave($entity): void
+    {
     }
 
     public abstract function entityClass(): string;
