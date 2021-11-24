@@ -77,7 +77,6 @@ class Pagination
             'limit' => $data->getMaxPerPage(),
             'total_pages' => $data->getNbPages(),
             'total_results' => $data->getNbResults(),
-            'page_results' => count($data->getCurrentPageResults()),
             'next_page' => $data->hasNextPage() ? $data->getNextPage() : null,
             'previous_page' => $data->hasPreviousPage() ? $data->getPreviousPage() : null,
         ];
