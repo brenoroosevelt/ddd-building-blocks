@@ -8,7 +8,7 @@ use JsonSerializable;
 use Pagerfanta\PagerfantaInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class PaginatedCollection implements JsonSerializable
+class Collection implements JsonSerializable
 {
     const WRAPPER_DATA_KEY = 'data';
     const WRAPPER_PAGINATION_KEY = 'pagination';
