@@ -90,9 +90,9 @@ class Pagination
         return [
             'self' => self::getPageLink($current, $request),
             'first' => self::getPageLink(1, $request),
-            'last' => $last ? self::getPageLink($last, $request) : null,
-            'prev' => $data->hasPreviousPage() ? self::getPageLink($current +1, $request) : null,
-            'next' => $data->hasNextPage() ? self::getPageLink($current -1, $request) : null,
+            'last' => self::getPageLink($data->getNbPages(), $request),
+            'prev' => $data->hasPreviousPage() ? self::getPageLink($data->getPreviousPage(), $request) : null,
+            'next' => $data->hasNextPage() ? self::getPageLink($data->getNextPage(), $request) : null,
         ];
     }
 
