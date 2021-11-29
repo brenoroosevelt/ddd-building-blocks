@@ -26,10 +26,6 @@ class Collection implements JsonSerializable
     public function jsonSerialize(): array
     {
         $info[$this->wrapperDataKey] = $this->data;
-//            $this->data instanceof JsonSerializable ?
-//                $this->data->jsonSerialize() :
-//                $this->data;
-
         if ($this->data instanceof PagerfantaInterface) {
             $info[$this->wrapperPaginationKey] = Pagination::paginationInfo($this->data);
 
