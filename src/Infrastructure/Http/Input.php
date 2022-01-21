@@ -5,13 +5,14 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure\Http;
 
 use ArrayAccess;
 use ArrayIterator;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ObjectParameter;
 use Countable;
 use DateTimeImmutable;
 use IteratorAggregate;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 
-class Input implements ArrayAccess, IteratorAggregate, Countable
+class Input implements ArrayAccess, IteratorAggregate, Countable, ObjectParameter
 {
     public array $query;
     public array $body;
@@ -24,7 +25,7 @@ class Input implements ArrayAccess, IteratorAggregate, Countable
         $this->attributes = $this->request->getAttributes();
     }
 
-    public function get(string $key, $default = null)
+    public function get(string $key, $default = null): mixed
     {
         return $this->query[$key] ?? $this->body[$key] ?? $this->attributes[$key] ?? $default;
     }
