@@ -5,12 +5,13 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure\Http;
 
 use ArrayAccess;
 use ArrayIterator;
+use Countable;
 use DateTimeImmutable;
 use IteratorAggregate;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 
-class Input implements ArrayAccess, IteratorAggregate
+class Input implements ArrayAccess, IteratorAggregate, Countable
 {
     public array $query;
     public array $body;
@@ -94,5 +95,10 @@ class Input implements ArrayAccess, IteratorAggregate
     public function offsetUnset(mixed $offset)
     {
         throw new RuntimeException('Read only input: cannot unset values');
+    }
+
+    public function count(): int
+    {
+        return count($this->toArray());
     }
 }
