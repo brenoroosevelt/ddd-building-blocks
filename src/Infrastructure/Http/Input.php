@@ -68,11 +68,7 @@ class Input implements ArrayAccess, IteratorAggregate
 
     public function all(): array
     {
-        return [
-            ...$this->query,
-            ...$this->body,
-            ...$this->attributes
-        ];
+        return array_merge($this->attributes, $this->body, $this->query);
     }
 
     public function getIterator(): ArrayIterator
@@ -80,7 +76,7 @@ class Input implements ArrayAccess, IteratorAggregate
         return new ArrayIterator($this->all());
     }
 
-    public function offsetExists(mixed $offset)
+    public function offsetExists(mixed $offset): bool
     {
         return $this->has($offset);
     }
