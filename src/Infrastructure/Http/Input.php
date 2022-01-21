@@ -84,12 +84,12 @@ class Input implements ArrayAccess, IteratorAggregate, Countable
 
     public function offsetSet(mixed $offset, mixed $value)
     {
-        throw new RuntimeException('Read only input: cannot set values');
+        throw new RuntimeException('Class `Input` is read-only: cannot set values');
     }
 
     public function offsetUnset(mixed $offset)
     {
-        throw new RuntimeException('Read only input: cannot unset values');
+        throw new RuntimeException('Class `Input` is read-only: cannot unset values');
     }
 
     public function count(): int
