@@ -66,14 +66,14 @@ class Input implements ArrayAccess, IteratorAggregate
         return $value !== null ? new DateTimeImmutable($value) : $defaultValue;
     }
 
-    public function all(): array
+    public function toArray(): array
     {
         return array_merge($this->attributes, $this->body, $this->query);
     }
 
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator($this->all());
+        return new ArrayIterator($this->toArray());
     }
 
     public function offsetExists(mixed $offset): bool
