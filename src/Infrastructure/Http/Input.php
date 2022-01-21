@@ -38,33 +38,28 @@ class Input implements ArrayAccess, IteratorAggregate, Countable
 
     public function getString(string $key, ?string $default = null): ?string
     {
-        $value = $this->get($key);
-        return $value !== null ? (string) $value: $default;
+        return $this->has($key) ? (string) $this->get($key) : $default;
     }
 
     public function getInt(string $key, ?int $default = null): ?int
     {
-        $value = $this->get($key);
-        return $value !== null ? (int) $value: $default;
+        return $this->has($key) ? (int) $this->get($key) : $default;
     }
 
     public function getFloat(string $key, ?float $default = null): ?float
     {
-        $value = $this->get($key);
-        return $value !== null ? (float) $value: $default;
+        return $this->has($key) ? (float) $this->get($key) : $default;
     }
 
     public function getBoolean(string $key, ?bool $default = null): ?bool
     {
-        $value = $this->get($key);
-        return $value !== null ? (bool) $value: $default;
+        return $this->has($key) ? (bool) $this->get($key) : $default;
     }
 
     public function getDateTime(string $key, ?string $default = null): ?DateTimeImmutable
     {
-        $value = $this->get($key);
         $defaultValue = $default !== null ? new DateTimeImmutable($default) : null;
-        return $value !== null ? new DateTimeImmutable($value) : $defaultValue;
+        return $this->has($key) ? new DateTimeImmutable($this->get($key)) : $defaultValue;
     }
 
     public function toArray(): array
