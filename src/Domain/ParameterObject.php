@@ -5,7 +5,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
 use DateTimeImmutable;
 
-interface ObjectParameter
+interface ParameterObject
 {
     public function has(string $key): bool;
     public function get(string $key, $default = null): mixed;

@@ -15,15 +15,4 @@ class Utility
         $filtered = array_filter($v);
         return array_shift($filtered);
     }
-
-    public function first(iterable $values, callable $filter)
-    {
-        foreach ($values as $k => $v) {
-            if (true === $filter($v, $k)) {
-                return $v;
-            }
-        }
-
-        return null;
-    }
 }

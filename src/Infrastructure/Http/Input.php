@@ -5,14 +5,14 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Infrastructure\Http;
 
 use ArrayAccess;
 use ArrayIterator;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ObjectParameter;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ParameterObject;
 use Countable;
 use DateTimeImmutable;
 use IteratorAggregate;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 
-class Input implements ArrayAccess, IteratorAggregate, Countable, ObjectParameter
+class Input implements ArrayAccess, IteratorAggregate, Countable, ParameterObject
 {
     public array $query;
     public array $body;

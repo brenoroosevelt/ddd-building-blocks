@@ -6,7 +6,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Sample;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\AggregateRoot;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\Handler;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Identity;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ObjectParameter;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ParameterObject;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Attributes\UseRepository;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\FullName;
@@ -38,7 +38,7 @@ class User extends AggregateRoot
     }
 
     #[Handler]
-    public function generic(ObjectParameter $param): void
+    public function generic(ParameterObject $param): void
     {
         $param->getFloat('value');
     }
