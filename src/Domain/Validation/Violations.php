@@ -46,7 +46,7 @@ class Violations implements IteratorAggregate, Countable
     public function guard(): void
     {
         if (!$this->isOk()) {
-            throw new ValidationErrors($this->getErrors());
+            throw new ValidationErrors(['_errors' => $this]);
         }
     }
 

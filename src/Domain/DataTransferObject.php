@@ -45,6 +45,6 @@ class DataTransferObject
 
     protected function getValidator(): Validator
     {
-        return Validator::fromAttributes($this);
+        return Validator::fromClass($this);
     }
 }

@@ -8,11 +8,12 @@ use Throwable;
 
 class ValidationErrors extends DomainException
 {
+    /** @var Violations[]  */
     private array $errors;
 
     public function __construct(array $errors, $message = '', $code = 422, Throwable $previous = null)
     {
-        $this->errors = $errors;
+        $this->errors = array_filter($errors, fn($error) => $error instanceof Violations);
         $messages = [];
         foreach ($errors as $fieldName => $errorsForField) {
             foreach ($errorsForField as $errorForField) {
@@ -24,6 +25,7 @@ class ValidationErrors extends DomainException
         parent::__construct($message, $code, $previous);
     }
 
+    /** @return Violations[] */
     public function errors(): array
     {
         return $this->errors;

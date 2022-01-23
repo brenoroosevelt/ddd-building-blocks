@@ -3,93 +3,80 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationErrors;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AllowsEmpty;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Validation;
-use ReflectionAttribute;
 use ReflectionClass;
 
 class Validator
 {
-    private array $rules = [];
+    /** @var RuleSet[]  */
+    private array $ruleSets = [];
 
     public static function new(): self
     {
         return new self();
     }
 
-    public static function fromAttributes($objectOrClass, string $attribute = Constraint::class): self
+    public function field(string $field): RuleSet
     {
-        $instance = new self();
-        foreach ((new ReflectionClass($objectOrClass))->getProperties() as $property) {
-            $attributes = $property->getAttributes($attribute, ReflectionAttribute::IS_INSTANCEOF);
-            $propertyValidations = array_map(fn(ReflectionAttribute $r) => $r->newInstance(), $attributes);
-            foreach ($propertyValidations as $validation) {
-                $instance->rules[$property->getName()][] = $validation;
+        return $this->ruleSets[$field] ?? $this->ruleSets[$field] = new RuleSet();
+    }
+
+    public function only(string ...$fields): self
+    {
+        $instance = clone $this;
+        foreach ($instance->ruleSets as $field => $ruleSet) {
+            if (!in_array($field, $fields)) {
+                unset($instance->ruleSets[$field]);
             }
         }
 
         return $instance;
     }
 
-    public static function property($objectOrClass, string $property): self
+    public function except(string ...$fields): self
     {
-        $instance = new self();
-        $property = new \ReflectionProperty($objectOrClass, $property);
-        $attributes = $property->getAttributes(Constraint::class, ReflectionAttribute::IS_INSTANCEOF);
-        $propertyValidations = array_map(fn(ReflectionAttribute $r) => $r->newInstance(), $attributes);
-        foreach ($propertyValidations as $validation) {
-            $instance->rules[$property->getName()][] = $validation;
+        $instance = clone $this;
+        foreach ($fields as $field) {
+            unset($instance->ruleSets[$field]);
         }
 
         return $instance;
     }
 
-    public function add(string $name, $constraint, ?string $message = null): self
+    /**
+     * @param array $data
+     * @param array $context
+     * @return Violations[]
+     */
+    public function validate(array $data, array $context = []): array
     {
-        $this->rules[$name][] = new Validation($constraint, $message);
-        return $this;
-    }
-
-    public function validate(array $data, array $only = []): Violations
-    {
-        $notification = Violations::ok();
-        foreach ($this->rules as $name => $rules) {
-            $value = $data[$name] ?? null;
-            if ($this->allowsEmpty($name) && empty($value)) {
+        $result = [];
+        foreach ($this->ruleSets as $field => $ruleSet) {
+            if (!$ruleSet->isRequired() && !array_key_exists($field, $data)) {
                 continue;
             }
 
-            if (!empty($only) && !in_array($name, $only)) {
-                continue;
-            }
-
-            /** @var Constraint $rule */
-            foreach ($rules as $rule) {
-                $result = $rule->validate($value, $data);
-                $notification->fieldErrors($name, ...$result->messages());
-            }
+            $result[$field] = $ruleSet->validate($data[$field] ?? null, $context);
         }
 
-        return $notification;
+        return array_filter($result, fn(Violations $v) => !$v->isOk());
     }
 
-    public function validateOrFail(array $data, array $only = []): void
+    public function validateOrFail(array $data, array $context = []): void
     {
-        $result = $this->validate($data, $only);
-        if ($result->hasErrors()) {
-            throw new ValidationErrors($result->getErrors());
+        $violations = $this->validate($data, $context);
+        if (!empty($violations)) {
+            throw new ValidationErrors($violations);
         }
     }
 
-    private function allowsEmpty($name): bool
+    public static function fromClass(string|object $objectOrClass): self
     {
-        foreach ($this->rules[$name] ?? [] as $validation) {
-            if ($validation instanceof AllowsEmpty) {
-                return true;
-            }
+        $instance = new self;
+        foreach((new ReflectionClass($objectOrClass))->getProperties() as $property) {
+            $instance->ruleSets[$property->getName()] = RuleSet::fromReflectionProperty($property);
         }
 
-        return false;
+        $instance->ruleSets = array_filter($instance->ruleSets, fn(RuleSet $c) => !$c->isEmpty());
+        return $instance;
     }
 }
