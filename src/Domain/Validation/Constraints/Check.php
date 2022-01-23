@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractConstraint;
 
-class Check extends AbstractRule
+class Check extends AbstractConstraint
 {
     private $fn;
 

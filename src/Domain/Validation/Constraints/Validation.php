@@ -4,24 +4,24 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Rule;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractConstraint;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Violations;
 use UnexpectedValueException;
 
 #[Attribute(Attribute::IS_REPEATABLE | Attribute::TARGET_PROPERTY)]
-class Validation extends AbstractRule
+class Validation extends AbstractConstraint
 {
-    private Rule $constraint;
+    private Constraint $constraint;
 
     public function __construct($constraint, private ?string $message = null, private bool $stopOnFailure = false)
     {
         $this->constraint = $this->parseConstraint($constraint, $message);
     }
 
-    private function parseConstraint($constraint, $message): Rule
+    private function parseConstraint($constraint, $message): Constraint
     {
-        if ($constraint instanceof Rule) {
+        if ($constraint instanceof Constraint) {
             return $constraint;
         }
 
@@ -37,14 +37,14 @@ class Validation extends AbstractRule
             $constraintClass = array_shift($args);
         }
 
-        if (is_string($constraintClass) && is_subclass_of($constraintClass, Rule::class, true)) {
+        if (is_string($constraintClass) && is_subclass_of($constraintClass, Constraint::class, true)) {
             return new $constraintClass(...$args);
         }
 
         throw new UnexpectedValueException('Invalid constraint: ' . (string) $constraintClass);
     }
 
-    public function constraint(): Rule
+    public function constraint(): Constraint
     {
         return $this->constraint;
     }
@@ -69,9 +69,9 @@ class Validation extends AbstractRule
         return $this->stopOnFailure;
     }
 
-    private function callableConstraint(callable $fn, $message): Rule
+    private function callableConstraint(callable $fn, $message): Constraint
     {
-        return new class($fn, $message) implements Rule {
+        return new class($fn, $message) implements Constraint {
             public function __construct(private $fn, private $message)
             {
             }

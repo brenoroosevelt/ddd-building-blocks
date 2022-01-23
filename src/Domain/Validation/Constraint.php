@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
-interface Rule
+interface Constraint
 {
     public function validate($input, array $context = []): Violations;
 }

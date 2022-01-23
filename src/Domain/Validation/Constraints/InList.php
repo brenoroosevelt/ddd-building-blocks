@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractConstraint;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class InList extends AbstractRule
+class InList extends AbstractConstraint
 {
     public function __construct(private array $list, ?string $message = null)
     {

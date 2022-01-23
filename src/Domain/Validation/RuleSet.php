@@ -8,12 +8,12 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotRequired;
 use ReflectionAttribute;
 use ReflectionProperty;
 
-class RuleSet implements Rule
+class RuleSet implements Constraint
 {
-    /** @var Rule[] */
+    /** @var Constraint[] */
     private array $rules;
 
-    final public function __construct(Rule ...$rule)
+    final public function __construct(Constraint ...$rule)
     {
         $this->rules = $rule;
     }
@@ -23,13 +23,13 @@ class RuleSet implements Rule
         return new self();
     }
 
-    public function add(Rule ...$rules): self
+    public function add(Constraint ...$rules): self
     {
         array_push($this->rules, ...$rules);
         return $this;
     }
 
-    public function verify(callable $fn, string $message): self
+    public function check(callable $fn, string $message): self
     {
         $this->rules[] = new Check($fn, $message);
         return $this;
@@ -78,7 +78,7 @@ class RuleSet implements Rule
 
     public static function fromProperty(string|object $objectOrClass, string $property): self
     {
-        return self::fromReflectionProperty((new ReflectionProperty($objectOrClass, $property)));
+        return self::fromReflectionProperty(new ReflectionProperty($objectOrClass, $property));
     }
 
     public static function fromReflectionProperty(ReflectionProperty $property): self
@@ -86,7 +86,7 @@ class RuleSet implements Rule
         return new self(
             ...array_map(
                 fn(ReflectionAttribute $attribute) => $attribute->newInstance(),
-                $property->getAttributes(Rule::class, ReflectionAttribute::IS_INSTANCEOF)
+                $property->getAttributes(Constraint::class, ReflectionAttribute::IS_INSTANCEOF)
             )
         );
     }

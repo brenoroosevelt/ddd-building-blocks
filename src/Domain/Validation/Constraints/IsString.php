@@ -2,9 +2,9 @@
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractConstraint;
 
-class IsString extends AbstractRule
+class IsString extends AbstractConstraint
 {
     public function __construct(string $message = 'Este valor deve ser um texto (string)')
     {

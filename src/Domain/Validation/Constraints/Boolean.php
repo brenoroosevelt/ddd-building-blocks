@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractConstraint;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Boolean extends AbstractRule
+class Boolean extends AbstractConstraint
 {
     public function __construct(string $message = 'Este valor deve ser um boleano')
     {

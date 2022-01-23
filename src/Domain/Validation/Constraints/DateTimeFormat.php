@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Rule;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Violations;
 use DateTime;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class DateTimeFormat implements Rule
+class DateTimeFormat implements Constraint
 {
     const MESSAGE = 'Formato de data e/ou hora inválido, use %s';
     private string $message;

@@ -18,7 +18,7 @@ class Validator
         return new self();
     }
 
-    public static function fromAttributes($objectOrClass, string $attribute = Rule::class): self
+    public static function fromAttributes($objectOrClass, string $attribute = Constraint::class): self
     {
         $instance = new self();
         foreach ((new ReflectionClass($objectOrClass))->getProperties() as $property) {
@@ -36,7 +36,7 @@ class Validator
     {
         $instance = new self();
         $property = new \ReflectionProperty($objectOrClass, $property);
-        $attributes = $property->getAttributes(Rule::class, ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $property->getAttributes(Constraint::class, ReflectionAttribute::IS_INSTANCEOF);
         $propertyValidations = array_map(fn(ReflectionAttribute $r) => $r->newInstance(), $attributes);
         foreach ($propertyValidations as $validation) {
             $instance->rules[$property->getName()][] = $validation;
@@ -64,7 +64,7 @@ class Validator
                 continue;
             }
 
-            /** @var Rule $rule */
+            /** @var Constraint $rule */
             foreach ($rules as $rule) {
                 $result = $rule->validate($value, $data);
                 $notification->fieldErrors($name, ...$result->messages());

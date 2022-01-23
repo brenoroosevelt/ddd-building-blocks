@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
-abstract class AbstractRule implements Rule
+abstract class AbstractConstraint implements Constraint
 {
     protected string $message;
 
