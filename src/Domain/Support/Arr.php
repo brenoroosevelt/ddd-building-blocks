@@ -53,4 +53,49 @@ class Arr
 
         return $count;
     }
+
+    public static function atMost(int $n, iterable $values, callable $fn): bool
+    {
+        $count = 0;
+        foreach ($values as $key => $value) {
+            if (true === call_user_func_array($fn, [$value, $key])) {
+                $count++;
+                if ($count > $n) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static function atLeast(int $n, iterable $values, callable $fn): bool
+    {
+        $count = 0;
+        foreach ($values as $key => $value) {
+            if (true === call_user_func_array($fn, [$value, $key])) {
+                $count++;
+                if ($count >= $n) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static function exactly(int $n, iterable $values, callable $fn): bool
+    {
+        $count = 0;
+        foreach ($values as $key => $value) {
+            if (true === call_user_func_array($fn, [$value, $key])) {
+                $count++;
+                if ($count > $n) {
+                    return false;
+                }
+            }
+        }
+
+        return $count === $n;
+    }
 }
