@@ -1,21 +1,18 @@
 <?php
-declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
-use Attribute;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
-class NotNull extends AbstractRule
+class IsString extends AbstractRule
 {
-    public function __construct(string $message = 'Este valor não pode ser nulo')
+    public function __construct(string $message = 'Este valor deve ser um texto (string)')
     {
         parent::__construct($message);
     }
 
     public function isValid($input, array $context = []): bool
     {
-        return null === $input;
+        return is_string($input);
     }
 }

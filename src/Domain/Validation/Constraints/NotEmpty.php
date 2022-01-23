@@ -4,17 +4,18 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class NotEmpty implements Constraint
+class NotEmpty extends AbstractRule
 {
-    public function validate($input, array $context = []): ValidationResult
+    public function __construct(string $message = 'Este valor não pode ficar vazio')
     {
-        return
-            empty($input) ?
-                ValidationResult::problem('O valor não pode ser vazio') :
-                ValidationResult::ok();
+        parent::__construct($message);
+    }
+
+    public function isValid($input, array $context = []): bool
+    {
+        return empty($input);
     }
 }

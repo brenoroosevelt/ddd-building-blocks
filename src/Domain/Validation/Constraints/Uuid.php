@@ -5,17 +5,18 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
+use Ramsey\Uuid\Uuid as RamseyUuid;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class NotNull extends AbstractRule
+class Uuid extends AbstractRule
 {
-    public function __construct(string $message = 'Este valor não pode ser nulo')
+    public function __construct(string $message = 'Uuid inválido')
     {
         parent::__construct($message);
     }
 
     public function isValid($input, array $context = []): bool
     {
-        return null === $input;
+        return RamseyUuid::isValid((string) $input);
     }
 }

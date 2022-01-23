@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Rule;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AlwaysOk;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ValueObject;
-use BrenoRoosevelt\Specification\Spec\Rule;
 use BrenoRoosevelt\Specification\Specification;
 use function BrenoRoosevelt\Specification\greaterThan;
 use function BrenoRoosevelt\Specification\lessThan;
@@ -17,7 +16,7 @@ class Number extends ValueObject
 
     public function __construct(float $value)
     {
-        $this->getValidation()->validate($value)->guard();
+        $this->validationRules()->validate($value)->guard();
         $this->value = $value;
     }
 
@@ -31,7 +30,7 @@ class Number extends ValueObject
         return number_format($this->value, $decimals, $decimalSeparator, $thousandsSeparator);
     }
 
-    public function getValidation(): Constraint
+    public function validationRules(): Rule
     {
         return new AlwaysOk();
     }

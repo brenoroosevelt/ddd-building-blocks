@@ -4,31 +4,31 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Rule;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Violations;
 use DateTime;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class DateTimeFormat implements Constraint
+class DateTimeFormat implements Rule
 {
-    public function __construct(private string $format)
+    const MESSAGE = 'Formato de data e/ou hora inválido, use %s';
+    private string $message;
+
+    public function __construct(private string $format, string $message = null)
     {
+        $this->message = $message ?? sprintf(self::MESSAGE, $this->format);
     }
 
-    public function validate($input, array $context = []): ValidationResult
+    public function validate($input, array $context = []): Violations
     {
-        if (!is_string($input)) {
-            return $this->error();
+        $isStringViolation = (new IsString())->validate($input, $context);
+        if (!$isStringViolation->isOk()) {
+            return $isStringViolation;
         }
 
         $d = DateTime::createFromFormat($this->format, $input);
         return $d && $d->format($this->format) === $input ?
-            ValidationResult::ok() :
-            $this->error();
-    }
-
-    private function error(): ValidationResult
-    {
-        return ValidationResult::problem(sprintf('Formato inválido, use %s', $this->format));
+            Violations::ok() :
+            Violations::error($this->message);
     }
 }

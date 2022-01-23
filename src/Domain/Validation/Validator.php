@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Exception\ValidationErrors;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationErrors;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AllowsEmpty;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Validation;
 use ReflectionAttribute;
@@ -18,7 +18,7 @@ class Validator
         return new self();
     }
 
-    public static function fromAttributes($objectOrClass, string $attribute = Constraint::class): self
+    public static function fromAttributes($objectOrClass, string $attribute = Rule::class): self
     {
         $instance = new self();
         foreach ((new ReflectionClass($objectOrClass))->getProperties() as $property) {
@@ -36,7 +36,7 @@ class Validator
     {
         $instance = new self();
         $property = new \ReflectionProperty($objectOrClass, $property);
-        $attributes = $property->getAttributes(Constraint::class, ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $property->getAttributes(Rule::class, ReflectionAttribute::IS_INSTANCEOF);
         $propertyValidations = array_map(fn(ReflectionAttribute $r) => $r->newInstance(), $attributes);
         foreach ($propertyValidations as $validation) {
             $instance->rules[$property->getName()][] = $validation;
@@ -51,16 +51,20 @@ class Validator
         return $this;
     }
 
-    public function validate(array $data): ValidationResult
+    public function validate(array $data, array $only = []): Violations
     {
-        $notification = ValidationResult::ok();
+        $notification = Violations::ok();
         foreach ($this->rules as $name => $rules) {
             $value = $data[$name] ?? null;
             if ($this->allowsEmpty($name) && empty($value)) {
                 continue;
             }
 
-            /** @var Constraint $rule */
+            if (!empty($only) && !in_array($name, $only)) {
+                continue;
+            }
+
+            /** @var Rule $rule */
             foreach ($rules as $rule) {
                 $result = $rule->validate($value, $data);
                 $notification->fieldErrors($name, ...$result->messages());
@@ -70,9 +74,9 @@ class Validator
         return $notification;
     }
 
-    public function validateOrFail(array $data): void
+    public function validateOrFail(array $data, array $only = []): void
     {
-        $result = $this->validate($data);
+        $result = $this->validate($data, $only);
         if ($result->hasErrors()) {
             throw new ValidationErrors($result->getErrors());
         }

@@ -4,22 +4,18 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class PregMatch implements Constraint
+class PregMatch extends AbstractRule
 {
-    public function __construct(private string $pattern)
+    public function __construct(private string $pattern, ?string $message = null)
     {
+        parent::__construct($message ?? sprintf('Este valor não corresponde ao padrão: %s', $this->pattern));
     }
 
-    public function validate($input, array $context = []): ValidationResult
+    public function isValid($input, array $context = []): bool
     {
-        if (preg_match($this->pattern, $input) === 1) {
-            return ValidationResult::ok();
-        }
-
-        return ValidationResult::problem(sprintf('Valor não corresponde ao padrão: %s', $this->pattern));
+        return preg_match($this->pattern, $input) === 1;
     }
 }

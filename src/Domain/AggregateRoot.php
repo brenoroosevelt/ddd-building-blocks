@@ -12,4 +12,6 @@ abstract class AggregateRoot extends Entity
     {
         EventManager::eventProvider()->recordEvent($event);
     }
+
+    //public abstract static function repositoryClass(): string;
 }

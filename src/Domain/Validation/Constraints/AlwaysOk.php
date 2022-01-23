@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Rule;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Violations;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class AlwaysOk implements Constraint
+class AlwaysOk implements Rule
 {
-    public function validate($input, array $context = []): ValidationResult
+    public function validate($input, array $context = []): Violations
     {
-        return ValidationResult::ok();
+        return Violations::ok();
     }
 }

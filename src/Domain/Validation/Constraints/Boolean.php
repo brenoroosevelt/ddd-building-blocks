@@ -4,15 +4,18 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints;
 
 use Attribute;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationResult;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractRule;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Boolean extends AbstractConstraint
+class Boolean extends AbstractRule
 {
-    protected static string $defaultMessage = 'Valor deve ser um boleano';
-
-    public function validate($input, array $context = []): ValidationResult
+    public function __construct(string $message = 'Este valor deve ser um boleano')
     {
-        return is_bool($input)? $this->ok() : $this->error();
+        parent::__construct($message);
+    }
+
+    public function isValid($input, array $context = []): bool
+    {
+        return is_bool($input);
     }
 }
