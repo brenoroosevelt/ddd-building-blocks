@@ -5,21 +5,21 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
 class Arr
 {
-    public static function first(iterable $values, callable $filter)
+    public static function first(iterable $values, callable $fn)
     {
-        foreach ($values as $k => $v) {
-            if (true === $filter($v, $k)) {
-                return $v;
+        foreach ($values as $key => $value) {
+            if (true === call_user_func_array($fn, [$value, $key])) {
+                return $value;
             }
         }
 
         return null;
     }
 
-    public static function some(iterable $values, callable $filter): bool
+    public static function some(iterable $values, callable $fn): bool
     {
-        foreach ($values as $k => $v) {
-            if (true === $filter($v, $k)) {
+        foreach ($values as $key => $value) {
+            if (true === call_user_func_array($fn, [$value, $key])) {
                 return true;
             }
         }
@@ -27,16 +27,16 @@ class Arr
         return false;
     }
 
-    public static function none(iterable $values, callable $filter): bool
+    public static function none(iterable $values, callable $fn): bool
     {
-        return !Arr::some($values, $filter);
+        return !Arr::some($values, $fn);
     }
 
     public static function sum(iterable $values, callable $fn): float
     {
         $sum = 0.0;
-        foreach ($values as $key => $item) {
-            $sum += $fn($item, $key);
+        foreach ($values as $key => $value) {
+            $sum += call_user_func_array($fn, [$value, $key]);
         }
 
         return $sum;
@@ -45,8 +45,8 @@ class Arr
     public static function count(iterable $values, callable $fn): int
     {
         $count = 0;
-        foreach ($values as $key => $item) {
-            if (true === $fn($item, $key)) {
+        foreach ($values as $key => $value) {
+            if (true === call_user_func_array($fn, [$value, $key])) {
                 $count++;
             }
         }
