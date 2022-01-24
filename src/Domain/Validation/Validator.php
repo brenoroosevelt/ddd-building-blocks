@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Arr;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotRequired;
 
 class Validator
 {
     /** @var RuleSet[] */
-    private array $ruleSets = [];
+    private array $ruleSets;
 
     final public function __construct(array $ruleSets = [])
     {
@@ -20,9 +21,25 @@ class Validator
         return new self;
     }
 
-    public function field(string $field): RuleSet
+    public function ruleSet(string $field): RuleSet
     {
         return $this->ruleSets[$field] ?? $this->ruleSets[$field] = new RuleSet();
+    }
+
+    public function field(string $field, Constraint|RuleSet ...$rules): self
+    {
+        $ruleset = $this->ruleSet($field);
+        foreach ($rules as $rule) {
+            if ($rule instanceof Constraint) {
+                $ruleset->add($rule);
+            }
+
+            if ($rule instanceof RuleSet) {
+                $ruleset->add(...iterator_to_array($rule));
+            }
+        }
+
+        return $this;
     }
 
     /** @return Violations[] */
@@ -42,17 +59,12 @@ class Validator
 
     public function isRequired(string $field): bool
     {
-        if ($this->field($field)->isEmpty()) {
+        $ruleSet = $this->ruleSet($field);
+        if ($ruleSet->isEmpty()) {
             return false;
         }
 
-        foreach ($this->field($field) as $constraint) {
-            if ($constraint instanceof NotRequired) {
-                return false;
-            }
-        }
-
-        return true;
+        return Arr::none($ruleSet, fn($constraint) => $constraint instanceof NotRequired);
     }
 
     public function validateOrFail(array $data, array $context = [], string $message = null): void

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Test;
 
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Email;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\InList;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotRequired;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\RuleSet;
@@ -23,11 +24,8 @@ class ValidatorTest extends TestCase
         try {
 
             Validator::new()
-                ->field('nome')
-                    ->email(message: 'email  invalido')
-                    ->notEmpty()
-                    ->validateOrFail('nome');
-
+                ->field('nome', new NotRequired, new Email)
+                ->field('test', RuleSet::new()->email()->notEmpty());
 
         }catch (ValidationErrors $validationErrors) {
             var_dump($validationErrors->getMessage());
