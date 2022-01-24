@@ -3,13 +3,30 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Check;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotRequired;
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionProperty;
+use RuntimeException;
 
-class RuleSet implements Constraint
+/**
+ * @method self alwaysOk()
+ * @method self boolean(string $message = null)
+ * @method self check(callable $fn, string $message = null)
+ * @method self dateTimeFormat(string $format, string $message = null)
+ * @method self email(string $message = null)
+ * @method self fullName(string $message = null)
+ * @method self inList(array $list, boolean $strict = true, string $message = null)
+ * @method self isString(string $message = null)
+ * @method self notEmpty(string $message = null)
+ * @method self notNull(string $message = null)
+ * @method self notRequired()
+ * @method self pregMatch(string $pattern, string $message = null)
+ * @method self uuid()
+ */
+class RuleSet implements Constraint, IteratorAggregate, Countable
 {
     /** @var Constraint[] */
     private array $rules;
@@ -30,18 +47,6 @@ class RuleSet implements Constraint
         return $this;
     }
 
-    public function check(callable $fn, string $message): self
-    {
-        $this->rules[] = new Check($fn, $message);
-        return $this;
-    }
-
-    public function notRequired(): self
-    {
-        $this->rules[] = new NotRequired;
-        return $this;
-    }
-
     public function validate($input, array $context = []): Violations
     {
         $violations = Violations::ok();
@@ -57,19 +62,15 @@ class RuleSet implements Constraint
         $this->validate($data, $context)->guard($field, $message);
     }
 
-    public function isRequired(): bool
+    public function __call(string $name, array $arguments): self
     {
-        if ($this->isEmpty()) {
-            return false;
+        $class = sprintf("%s\%s", __NAMESPACE__ . '\\Constraints', ucfirst($name));
+        if (!class_exists($class)) {
+            throw new RuntimeException(sprintf('Constraint not found: (%s).', $name));
         }
 
-        foreach ($this->rules as $constraint) {
-            if ($constraint instanceof NotRequired) {
-                return false;
-            }
-        }
-
-        return true;
+        $this->rules[] = new $class(...$arguments);
+        return $this;
     }
 
     public function isEmpty(): bool
@@ -101,5 +102,15 @@ class RuleSet implements Constraint
                 $property->getAttributes(Constraint::class, ReflectionAttribute::IS_INSTANCEOF)
             )
         );
+    }
+
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->rules);
+    }
+
+    public function count(): int
+    {
+        return count($this->rules);
     }
 }

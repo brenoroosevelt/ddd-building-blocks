@@ -22,7 +22,7 @@ class ValidatorTest extends TestCase
 
         try {
 
-            RuleSet::fromProperty($class, 'p1')->validateOrFail();
+
         }catch (ValidationErrors $validationErrors) {
             var_dump($validationErrors->getMessage());
         }

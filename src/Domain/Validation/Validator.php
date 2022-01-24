@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotRequired;
+
 class Validator
 {
     /** @var RuleSet[] */
@@ -28,7 +30,7 @@ class Validator
     {
         $result = [];
         foreach ($this->ruleSets as $field => $ruleSet) {
-            if (!$ruleSet->isRequired() && !array_key_exists($field, $data)) {
+            if (!$this->isRequired($field) && !array_key_exists($field, $data)) {
                 continue;
             }
 
@@ -36,6 +38,21 @@ class Validator
         }
 
         return array_filter($result, fn(Violations $v) => !$v->isOk());
+    }
+
+    public function isRequired(string $field): bool
+    {
+        if ($this->field($field)->isEmpty()) {
+            return false;
+        }
+
+        foreach ($this->field($field) as $constraint) {
+            if ($constraint instanceof NotRequired) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function validateOrFail(array $data, array $context = [], string $message = null): void

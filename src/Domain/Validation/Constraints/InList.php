@@ -9,7 +9,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AbstractConstraint;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class InList extends AbstractConstraint
 {
-    public function __construct(private array $list, ?string $message = null)
+    public function __construct(private array $list, private bool $strict = true, ?string $message = null)
     {
         parent::__construct(
             $message ??
@@ -19,6 +19,6 @@ class InList extends AbstractConstraint
 
     public function isValid($input, array $context = []): bool
     {
-        return in_array($input, $this->list, true);
+        return in_array($input, $this->list, $this->strict);
     }
 }
