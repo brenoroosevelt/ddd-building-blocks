@@ -10,7 +10,10 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\RuleSet;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationErrors;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Validator;
 use BrenoRoosevelt\Specification\Spec\Rule;
+use Exception;
+use JetBrains\PhpStorm\Internal\TentativeType;
 use PHPUnit\Framework\TestCase;
+use Traversable;
 
 class ValidatorTest extends TestCase
 {

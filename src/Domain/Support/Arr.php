@@ -5,7 +5,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
 class Arr
 {
-    public static function first(iterable $values, callable $fn)
+    public static function first(iterable $values, callable $fn): mixed
     {
         foreach ($values as $key => $value) {
             if (true === call_user_func_array($fn, [$value, $key])) {
