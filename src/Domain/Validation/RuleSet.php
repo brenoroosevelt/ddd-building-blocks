@@ -77,6 +77,7 @@ class RuleSet implements Constraint
         return empty($this->rules);
     }
 
+    /** @return RuleSet[] */
     public static function fromClass(string|object $objectOrClass): array
     {
         $ruleSets = [];
