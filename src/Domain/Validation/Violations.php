@@ -43,10 +43,10 @@ class Violations implements IteratorAggregate, Countable
         return empty($this->errors);
     }
 
-    public function guard(): void
+    public function guard(string $field = '_errors'): void
     {
         if (!$this->isOk()) {
-            throw new ValidationErrors(['_errors' => $this]);
+            throw new ValidationErrors([$field => $this]);
         }
     }
 

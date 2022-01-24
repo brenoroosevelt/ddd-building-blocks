@@ -3,16 +3,19 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 
-use ReflectionClass;
-
 class Validator
 {
-    /** @var RuleSet[]  */
+    /** @var RuleSet[] */
     private array $ruleSets = [];
+
+    final public function __construct(array $ruleSets = [])
+    {
+        $this->ruleSets = array_filter($ruleSets, fn($item) => $item instanceof RuleSet);
+    }
 
     public static function new(): self
     {
-        return new self();
+        return new self;
     }
 
     public function field(string $field): RuleSet
@@ -20,33 +23,7 @@ class Validator
         return $this->ruleSets[$field] ?? $this->ruleSets[$field] = new RuleSet();
     }
 
-    public function only(string ...$fields): self
-    {
-        $instance = clone $this;
-        foreach ($instance->ruleSets as $field => $ruleSet) {
-            if (!in_array($field, $fields)) {
-                unset($instance->ruleSets[$field]);
-            }
-        }
-
-        return $instance;
-    }
-
-    public function except(string ...$fields): self
-    {
-        $instance = clone $this;
-        foreach ($fields as $field) {
-            unset($instance->ruleSets[$field]);
-        }
-
-        return $instance;
-    }
-
-    /**
-     * @param array $data
-     * @param array $context
-     * @return Violations[]
-     */
+    /** @return Violations[] */
     public function validate(array $data, array $context = []): array
     {
         $result = [];
@@ -71,12 +48,6 @@ class Validator
 
     public static function fromClass(string|object $objectOrClass): self
     {
-        $instance = new self;
-        foreach((new ReflectionClass($objectOrClass))->getProperties() as $property) {
-            $instance->ruleSets[$property->getName()] = RuleSet::fromReflectionProperty($property);
-        }
-
-        $instance->ruleSets = array_filter($instance->ruleSets, fn(RuleSet $c) => !$c->isEmpty());
-        return $instance;
+        return new self(RuleSet::fromClass($objectOrClass));
     }
 }

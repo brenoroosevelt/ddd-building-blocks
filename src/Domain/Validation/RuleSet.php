@@ -6,6 +6,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Check;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotRequired;
 use ReflectionAttribute;
+use ReflectionClass;
 use ReflectionProperty;
 
 class RuleSet implements Constraint
@@ -74,6 +75,16 @@ class RuleSet implements Constraint
     public function isEmpty(): bool
     {
         return empty($this->rules);
+    }
+
+    public static function fromClass(string|object $objectOrClass): array
+    {
+        $ruleSets = [];
+        foreach((new ReflectionClass($objectOrClass))->getProperties() as $property) {
+            $ruleSets[$property->getName()] = RuleSet::fromReflectionProperty($property);
+        }
+
+        return array_filter($ruleSets, fn(RuleSet $c) => !$c->isEmpty());
     }
 
     public static function fromProperty(string|object $objectOrClass, string $property): self
