@@ -18,13 +18,7 @@ class Arr
 
     public static function some(iterable $values, callable $fn): bool
     {
-        foreach ($values as $key => $value) {
-            if (true === call_user_func_array($fn, [$value, $key])) {
-                return true;
-            }
-        }
-
-        return false;
+        return Arr::atLeast(1, $values, $fn);
     }
 
     public static function none(iterable $values, callable $fn): bool
