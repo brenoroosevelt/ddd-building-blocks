@@ -38,11 +38,11 @@ class Validator
         return array_filter($result, fn(Violations $v) => !$v->isOk());
     }
 
-    public function validateOrFail(array $data, array $context = []): void
+    public function validateOrFail(array $data, array $context = [], string $message = null): void
     {
         $violations = $this->validate($data, $context);
         if (!empty($violations)) {
-            throw new ValidationErrors($violations);
+            throw new ValidationErrors($violations, $message);
         }
     }
 

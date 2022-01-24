@@ -52,9 +52,9 @@ class RuleSet implements Constraint
         return $violations;
     }
 
-    public function validateOrFail($data, array $context = []): void
+    public function validateOrFail($data, array $context = [], string $field = '_errors', string $message = null): void
     {
-        $this->validate($data, $context)->guard();
+        $this->validate($data, $context)->guard($field, $message);
     }
 
     public function isRequired(): bool

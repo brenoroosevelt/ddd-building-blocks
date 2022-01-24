@@ -11,7 +11,7 @@ class ValidationErrors extends DomainException
     /** @var Violations[]  */
     private array $errors;
 
-    public function __construct(array $errors, $message = '', $code = 422, Throwable $previous = null)
+    public function __construct(array $errors, $message = null, $code = 422, Throwable $previous = null)
     {
         $this->errors = array_filter($errors, fn($error) => $error instanceof Violations);
         $messages = [];
