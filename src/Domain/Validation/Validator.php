@@ -60,11 +60,7 @@ class Validator
     public function isRequired(string $field): bool
     {
         $ruleSet = $this->ruleSet($field);
-        if ($ruleSet->isEmpty()) {
-            return false;
-        }
-
-        return Arr::none($ruleSet, fn($constraint) => $constraint instanceof NotRequired);
+        return !$ruleSet->isEmpty() && Arr::none($ruleSet, fn($constraint) => $constraint instanceof NotRequired);
     }
 
     public function validateOrFail(array $data, array $context = [], string $message = null): void
