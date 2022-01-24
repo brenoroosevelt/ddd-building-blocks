@@ -16,16 +16,6 @@ class Arr
         return null;
     }
 
-    public static function some(iterable $values, callable $fn): bool
-    {
-        return Arr::atLeast(1, $values, $fn);
-    }
-
-    public static function none(iterable $values, callable $fn): bool
-    {
-        return !Arr::some($values, $fn);
-    }
-
     public static function sum(iterable $values, callable $fn): float
     {
         $sum = 0.0;
@@ -91,5 +81,15 @@ class Arr
         }
 
         return $count === $n;
+    }
+
+    public static function some(iterable $values, callable $fn): bool
+    {
+        return Arr::atLeast(1, $values, $fn);
+    }
+
+    public static function none(iterable $values, callable $fn): bool
+    {
+        return !Arr::some($values, $fn);
     }
 }
