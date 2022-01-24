@@ -22,6 +22,12 @@ class ValidatorTest extends TestCase
 
         try {
 
+            Validator::new()
+                ->field('nome')
+                    ->email(message: 'email  invalido')
+                    ->notEmpty()
+                    ->validateOrFail('nome');
+
 
         }catch (ValidationErrors $validationErrors) {
             var_dump($validationErrors->getMessage());

@@ -16,6 +16,6 @@ class NotEmpty extends AbstractConstraint
 
     public function isValid($input, array $context = []): bool
     {
-        return empty($input);
+        return !empty($input);
     }
 }

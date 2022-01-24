@@ -16,6 +16,6 @@ class NotNull extends AbstractConstraint
 
     public function isValid($input, array $context = []): bool
     {
-        return null === $input;
+        return null !== $input;
     }
 }

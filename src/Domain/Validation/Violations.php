@@ -27,9 +27,9 @@ class Violations implements IteratorAggregate, Countable
         return new self(...$errors);
     }
 
-    public function add(string $error): self
+    public function add(string ...$error): self
     {
-        $this->errors[] = $error;
+        array_push($this->errors, ...$error);
         return $this;
     }
 
