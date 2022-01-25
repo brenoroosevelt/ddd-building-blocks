@@ -8,6 +8,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\FullName;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Rule;
 use BrenoRoosevelt\Specification\Spec\In;
 use BrenoRoosevelt\Specification\Spec\IsNull;
+use BrenoRoosevelt\Specification\Spec\Not;
 use BrenoRoosevelt\Specification\Spec\NotEquals;
 use OniBus\Command\Command;
 
@@ -15,6 +16,6 @@ class ChangeName extends DataTransferObject implements Command
 {
     use UserIdTrait;
 
-    #[Rule([In::class, ['M', 'F']], 'nome deve ser completo')]
+    #[Rule('is_string', 'nome deve ser string')]
     public ?string $name;
 }
