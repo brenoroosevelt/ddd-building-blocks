@@ -6,14 +6,9 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Test;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Email;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\InList;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\NotRequired;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\RuleSet;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationErrors;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Validator;
-use BrenoRoosevelt\Specification\Spec\Rule;
-use Exception;
-use JetBrains\PhpStorm\Internal\TentativeType;
 use PHPUnit\Framework\TestCase;
-use Traversable;
 
 class ValidatorTest extends TestCase
 {
@@ -25,10 +20,8 @@ class ValidatorTest extends TestCase
         };
 
         try {
-
             Validator::new()
-                ->field('nome', new NotRequired, new Email)
-                ->field('test', RuleSet::new()->email()->notEmpty());
+                ->field('nome', new NotRequired, new Email);
 
         }catch (ValidationErrors $validationErrors) {
             var_dump($validationErrors->getMessage());
