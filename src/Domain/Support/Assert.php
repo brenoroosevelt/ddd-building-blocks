@@ -13,16 +13,7 @@ final class Assert
     public static function that($value, Specification|callable|bool $rule, string|Throwable $error): void
     {
         if (!(new Rule($rule))->isSatisfiedBy($value)) {
-            Assert::throw($error);
+            throw $error instanceof Throwable ? $error : new Exception($error);
         }
-    }
-
-    private static function throw(string|Throwable $error): void
-    {
-        if ($error instanceof Throwable) {
-            throw $error;
-        }
-
-        throw new Exception($error);
     }
 }
