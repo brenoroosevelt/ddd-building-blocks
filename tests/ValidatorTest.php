@@ -5,7 +5,7 @@ namespace BrenoRoosevelt\DDD\BuildingBlocks\Test;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\Email;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\InList;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\NotRequired;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\NotRequired;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\RuleSet;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\ValidationErrors;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Validator;

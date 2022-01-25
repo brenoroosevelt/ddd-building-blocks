@@ -10,7 +10,7 @@ use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support\Uuid;
 trait UserIdTrait
 {
     #[Constraints\Uuid]
-    #[Constraints\NotRequired]
+    #[\BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\NotRequired]
     public string $userId;
 
     #[IdentityOf(User::class)]

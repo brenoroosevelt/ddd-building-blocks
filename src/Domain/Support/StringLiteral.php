@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain\Support;
 
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraint;
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Constraints\AlwaysOk;
+use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\AlwaysOk;
 use BrenoRoosevelt\DDD\BuildingBlocks\Domain\ValueObject;
 use BrenoRoosevelt\Specification\Specification;
 

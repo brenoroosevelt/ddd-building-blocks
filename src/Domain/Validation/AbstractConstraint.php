@@ -7,7 +7,7 @@ abstract class AbstractConstraint implements Constraint
 {
     protected string $message;
 
-    public function __construct(string $message = null)
+    public function __construct(?string $message = null)
     {
         $this->message = $message ?? sprintf('Constraint violation: %s', get_class($this));
     }

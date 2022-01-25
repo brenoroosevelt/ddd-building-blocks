@@ -9,23 +9,7 @@ use IteratorAggregate;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionProperty;
-use RuntimeException;
 
-/**
- * @method self alwaysOk()
- * @method self boolean(string $message = null)
- * @method self check(callable $fn, string $message = null)
- * @method self dateTimeFormat(string $format, string $message = null)
- * @method self email(string $message = null)
- * @method self fullName(string $message = null)
- * @method self inList(array $list, boolean $strict = true, string $message = null)
- * @method self isString(string $message = null)
- * @method self notEmpty(string $message = null)
- * @method self notNull(string $message = null)
- * @method self notRequired()
- * @method self pregMatch(string $pattern, string $message = null)
- * @method self uuid()
- */
 class RuleSet implements Constraint, IteratorAggregate, Countable
 {
     /** @var Constraint[] */
@@ -47,6 +31,12 @@ class RuleSet implements Constraint, IteratorAggregate, Countable
         return $this;
     }
 
+    public function rule($rule, string $message): self
+    {
+        $this->rules[] = new Rule($rule, $message);
+        return $this;
+    }
+
     public function validate($input, array $context = []): Violations
     {
         $violations = Violations::ok();
@@ -60,17 +50,6 @@ class RuleSet implements Constraint, IteratorAggregate, Countable
     public function validateOrFail($data, array $context = [], string $field = '_errors', string $message = null): void
     {
         $this->validate($data, $context)->guard($field, $message);
-    }
-
-    public function __call(string $name, array $arguments): self
-    {
-        $class = sprintf("%s\%s", __NAMESPACE__ . '\\Constraints', ucfirst($name));
-        if (!class_exists($class)) {
-            throw new RuntimeException(sprintf('Constraint not found: (%s).', $name));
-        }
-
-        $this->rules[] = new $class(...$arguments);
-        return $this;
     }
 
     public function isEmpty(): bool
