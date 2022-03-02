@@ -32,6 +32,9 @@ class Collection implements JsonSerializable
             if ($this->request instanceof ServerRequestInterface) {
                 $info[$this->wrapperPaginationKey][$this->wrapperPaginationLinksKey] =
                     Pagination::paginationLinks($this->data, $this->request);
+
+                $info['filter'] = $this->request->getQueryParams()['filter'] ?? [];
+                $info['sort'] = $this->request->getQueryParams()['sort'] ?? [];
             }
         }
 
