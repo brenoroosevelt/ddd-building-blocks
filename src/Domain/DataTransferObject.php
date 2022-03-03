@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace BrenoRoosevelt\DDD\BuildingBlocks\Domain;
 
-use BrenoRoosevelt\DDD\BuildingBlocks\Domain\Validation\Validator;
+use BrenoRoosevelt\Validation\Validator;
 use DateTime;
 use DateTimeImmutable;
 use ReflectionProperty;
@@ -45,6 +45,6 @@ class DataTransferObject
 
     protected function getValidator(): Validator
     {
-        return Validator::fromClass($this);
+        return Validator::fromProperties($this);
     }
 }

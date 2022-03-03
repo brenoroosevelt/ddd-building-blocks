@@ -41,7 +41,7 @@ class Filter
         bool $split = false
     ): \Doctrine\DBAL\Query\QueryBuilder|QueryBuilder {
 
-        $values = $split ? explode(' ', $value) : $value;
+        $values = $split ? explode(' ', $value) : [$value];
         foreach ($values as $value) {
             $paramName = 'p_' . md5(uniqid());
             $queryBuilder = $queryBuilder->andWhere("$field LIKE :$paramName")
