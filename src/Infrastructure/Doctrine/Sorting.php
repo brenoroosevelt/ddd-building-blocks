@@ -37,7 +37,7 @@ class Sorting
     public function apply(
         QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $queryBuilder,
         array $orderBy = []
-    ): QueryBuilder {
+    ): QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder {
         $orderBy = !empty($orderBy) ? $orderBy : $this->default;
         $orderBy =
             array_filter($orderBy, fn($v, $i) => array_key_exists($i, $this->fields), ARRAY_FILTER_USE_BOTH);

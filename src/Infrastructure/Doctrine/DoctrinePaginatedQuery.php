@@ -24,7 +24,7 @@ abstract class DoctrinePaginatedQuery implements PaginatedQuery
         return $this->pagination($query)->paginate($page, $perPage);
     }
 
-    public abstract function queryBuilder(): QueryBuilder;
+    public abstract function queryBuilder(): QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder;
 
     public function filters(): Filter
     {

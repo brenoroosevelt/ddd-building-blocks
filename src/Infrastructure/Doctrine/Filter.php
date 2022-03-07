@@ -25,7 +25,7 @@ class Filter
     public function apply(
         QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder $queryBuilder,
         array $filters = []
-    ): QueryBuilder {
+    ): QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder {
         foreach ($filters as $alias => $value) {
             $filter = $this->fields[$alias] ?? fn ($q, $v, $f) => $q;
             $queryBuilder = $filter($queryBuilder, $value, $filters);
