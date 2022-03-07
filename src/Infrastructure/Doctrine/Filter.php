@@ -27,7 +27,7 @@ class Filter
         array $filters = []
     ): QueryBuilder|\Doctrine\DBAL\Query\QueryBuilder {
         foreach ($filters as $alias => $value) {
-            $filter = $this->fields[$alias] ?? fn ($q, $v, $f) => $q;
+            $filter = array_key_exists($alias, $this->fields) ? $this->fields[$alias] : fn ($q, $v, $f) => $q;
             $queryBuilder = $filter($queryBuilder, $value, $filters);
         }
 
